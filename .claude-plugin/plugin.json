@@ -1,0 +1,20 @@
+{
+  "name": "forge",
+  "version": "1.0.0",
+  "description": "Idea-to-PR pipeline with a human gate at each seam: grill an idea into a spec, plan it adversarially into GitHub issues, then implement it against a negotiated contract and ship a PR.",
+  "author": {
+    "name": "Daniel Asirra",
+    "url": "https://github.com/dasirra"
+  },
+  "homepage": "https://github.com/dasirra/cc-forge",
+  "repository": "https://github.com/dasirra/cc-forge",
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "planning",
+    "github",
+    "issues",
+    "pull-request",
+    "agents"
+  ]
+}

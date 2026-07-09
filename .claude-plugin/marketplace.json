@@ -1,0 +1,25 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "cc-forge",
+  "description": "An idea-to-PR pipeline for Claude Code, with a human gate at each seam.",
+  "owner": {
+    "name": "Daniel Asirra",
+    "url": "https://github.com/dasirra"
+  },
+  "plugins": [
+    {
+      "name": "forge",
+      "description": "Interview an idea into a spec, plan it adversarially into GitHub issues, then build it against a negotiated contract and ship a PR.",
+      "source": "./",
+      "keywords": [
+        "workflow",
+        "planning",
+        "github",
+        "issues",
+        "pull-request",
+        "agents"
+      ],
+      "category": "workflow"
+    }
+  ]
+}
