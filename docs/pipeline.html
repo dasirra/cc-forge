@@ -117,7 +117,7 @@
   .zone.hum { border-top-color: var(--human); color: var(--human); }
 
   /* ---------- command columns ---------- */
-  .cols { display: grid; grid-template-columns: 1fr 1.05fr; gap: 28px; align-items: start; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
   @media (max-width: 860px) { .cols { grid-template-columns: 1fr; } }
   .stack { display: flex; flex-direction: column; gap: 28px; }
   .stack .planning { flex: 1; }
@@ -162,7 +162,6 @@
     display: flex; align-items: center; justify-content: center;
     color: var(--panel);
   }
-  .phase .dot.narrow { font-size: 8px; letter-spacing: -.03em; }
   .planning .dot { background: var(--plan); }
   .building .dot { background: var(--build); }
   .phase.gate .dot { background: var(--human); }
@@ -381,13 +380,6 @@
     </div>
 
     <div class="phase">
-      <span class="dot narrow">0.5</span>
-      <h3>Preflight</h3>
-      <p>Everything that can stop the run, resolved before a worktree, a contract, or an issue comment exists. gh auth and remote; then the evaluation surface, inferred from the repo and confirmed with you. <code>web</code> is the only surface with an external dependency, and it gets checked here rather than in Phase 6.</p>
-      <div class="chips"><span class="chip human">👤 confirm the surface</span><span class="chip art">--surface skips the question</span></div>
-    </div>
-
-    <div class="phase">
       <span class="dot">1</span>
       <h3>Base branch + worktree</h3>
       <p>Fresh isolated worktree; shared state in <code>harness/</code> (gitignored).</p>
@@ -460,7 +452,7 @@
 
 <section class="surfaces">
   <h4>Evaluation surfaces</h4>
-  <p>The contract is verified by observing the running artifact from outside. What "outside" means depends on what the project ships, so Phase 0.5 resolves it before anything expensive happens. Only <code>web</code> needs a browser automation MCP server.</p>
+  <p>The contract is verified by observing the running artifact from outside. What "outside" means depends on what the project ships, so a preflight step resolves the surface before anything expensive happens: before a worktree, a contract, or an issue comment exists. Only <code>web</code> needs a browser automation MCP server.</p>
   <table>
     <thead>
       <tr><th>Surface</th><th>Start it by</th><th>The evaluator observes by</th></tr>
