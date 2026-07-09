@@ -1,3 +1,5 @@
+<img src="assets/banner.png" alt="Forge: an opinionated idea-to-PR workflow for Claude Code. /forge:interview turns a vague idea into a spec, /forge:planning turns the spec into GitHub issues, /forge:building turns the issues into a contract-tested pull request, with a human gate between each. No agent grades its own work: planner vs critic, generator vs evaluator, evaluator vs fixer.">
+
 # Forge
 
 An opinionated idea-to-PR workflow for [Claude Code](https://claude.com/claude-code), with a human gate at each seam. Three commands, run in order.
