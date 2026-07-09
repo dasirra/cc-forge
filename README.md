@@ -1,6 +1,6 @@
 # Forge
 
-An idea-to-PR pipeline for [Claude Code](https://claude.com/claude-code), with a human gate at each seam. Three commands, run in order.
+An opinionated idea-to-PR workflow for [Claude Code](https://claude.com/claude-code), with a human gate at each seam. Three commands, run in order.
 
 ```
 /forge:interview   vague idea         ->  docs/specs/YYYY-MM-DD-<slug>.md
@@ -98,7 +98,9 @@ Forge is Claude Code specific, and not incidentally so. It depends on subagents 
 
 ## Credits
 
-Forge assembles ideas that are not mine. The mistakes in assembling them are.
+Forge is an opinionated idea-to-PR workflow. It assembles ideas that are not mine, and the opinions and the mistakes in assembling them are.
+
+Mine are the three-command shape with a human gate at each seam, `/forge:planning` as an adversarial PM-level pass that files straight to GitHub and leaves contested items for a human to arbitrate, the altitude discipline that bans technical content until `/forge:building` negotiates it against the live codebase, the evaluation surfaces and the preflight that resolves one before anything expensive happens, and the rule that the evaluator never runs the builders' own tests.
 
 **[Full Walkthrough: Workflow for AI Coding](https://www.youtube.com/watch?v=-QFHIoCo-Ko)**, Matt Pocock, at [AI Engineer](https://www.ai.engineer/). The grilling session that became `/forge:interview`, the smart zone and dumb zone, slicing work into vertical issues an agent can pick up independently, and the distinction between running an agent human-in-the-loop and running it AFK, unattended and away from the keyboard.
 
