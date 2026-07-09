@@ -1,5 +1,5 @@
 ---
-description: Implement signed-off issues end to end with a team of agents in an isolated worktree. Before coding, a generator and an adversarial evaluator negotiate a granular contract of what "done" means; after coding, the evaluator black-box tests the running app in a browser against that contract until it passes. Ships as a PR.
+description: Implement signed-off issues end to end with a team of agents in an isolated worktree. Before coding, a generator and an adversarial evaluator negotiate a granular contract of what "done" means; after coding, the evaluator black-box tests the running artifact against that contract until it passes. Ships as a PR.
 argument-hint: <#issue | #issue #issue ... | "description of the work"> [--gate] [--max-rounds N] [--base <branch>]
 ---
 
@@ -19,22 +19,27 @@ $ARGUMENTS
 | Role | What it does | Model | Effort |
 | --- | --- | --- | --- |
 | Generator | Proposes the contract, builds, fixes | opus (contract), sonnet (build/fix) | high for contract, inherit otherwise |
-| Evaluator | Attacks the contract; later black-box tests the running app in a browser | opus | high |
+| Evaluator | Attacks the contract; later black-box tests the running artifact through its evaluation surface | opus | high |
 
 Hard separation rule: the evaluator NEVER sees the generator's transcript,
-reasoning, or self-assessment. It receives only artifacts (contract, running
-app, issue text). Muddied context produces rubber-stamp evaluations.
+reasoning, self-assessment, implementation, or tests. It receives only
+artifacts (contract, running artifact, issue text). Muddied context produces
+rubber-stamp evaluations.
 
 ## State on disk
 
 All shared state lives in `harness/` inside the worktree (gitignored):
 
-- `harness/contract.json`: the negotiated criteria, each
+- `harness/contract.json`: `{surface, criteria}`. `surface` is the evaluation
+  surface resolved in Phase 0.5, recorded once so a resumed run never
+  re-derives it. Each criterion is
   `{id, issue, criterion, verify_how, status: proposed|agreed|pass|fail}`.
   `issue` is the issue number the criterion belongs to, or `"integration"`
   for cross-issue behavior. Single-issue and free-form runs use one issue
   value throughout.
 - `harness/critique.md`: evaluator findings, rewritten each round
+- `harness/eval/`: the evaluator's throwaway verification scripts. Never
+  committed, never merged into the project's test suite.
 - `harness/progress.json`: append-only log of
   `{ts, round, did, result}`. Never overwrite entries; models respect JSON
   files more than markdown.
@@ -58,6 +63,45 @@ criteria before proceeding.
 Flags: `--gate` pauses for human approval of the negotiated contract before
 building (default is fully autonomous). `--max-rounds N` caps evaluation
 rounds (default 5). `--base <branch>` forces the base branch.
+`--surface <name>` forces the evaluation surface.
+
+## Phase 0.5: Preflight
+
+Resolve everything that can stop the run BEFORE a worktree, a contract, or an
+issue comment exists. Failing here is cheap. Failing in Phase 6, after two
+opus negotiations and a full build, is not.
+
+1. **GitHub access.** `gh auth status` and `gh repo view`. If either fails,
+   stop and tell the user exactly what to run. Every run needs this: even
+   free-form work, which reads no issues, opens a PR in Phase 7.
+
+2. **Evaluation surface.** The contract is verified by observing the running
+   artifact from outside. What "outside" means depends on what the project
+   ships:
+
+   | Surface | Start it by | The evaluator observes by |
+   | --- | --- | --- |
+   | `web` | running the dev server | driving a browser |
+   | `library` | installing the package into a clean environment | calling the public API from throwaway scripts |
+   | `cli` | building or installing the executable | running it as a subprocess: argv, stdin, stdout, stderr, exit codes |
+   | `service` | booting the server | issuing real requests against its endpoints |
+   | `native` | launching the app or simulator | computer use |
+
+   Infer the likely surface from the repo (entry points, manifests, how the
+   README says to run it) and confirm with AskUserQuestion, your inference
+   first and labeled "(Recommended)". Never decide silently: a repo that
+   ships a library alongside a demo web app defeats every heuristic, and the
+   user knows which one the contract is about. `--surface` skips the question.
+
+3. **Surface dependencies.** `web` is the only surface with an external
+   dependency: a browser automation MCP server (claude-in-chrome or
+   Playwright). Verify one is connected. If it is not, stop and offer three
+   choices: install one, fall back to `native` and drive the browser with
+   computer use, or abort. Never continue into Phase 1 with no way to run
+   Phase 6.
+
+The resolved surface becomes `surface` in `harness/contract.json` and
+parameterizes Phases 2 and 6.
 
 ## Phase 1: Base branch and worktree
 
@@ -86,10 +130,15 @@ only.
    covering behavior that spans issues (only for multi-issue runs). Never
    dilute: three issues means roughly 40-60 criteria, not 30 split three
    ways. Each criterion is a single observable behavior with a concrete
-   verification method ("pressing ArrowLeft moves the player one cell left;
-   verify in browser", not "movement works"). Cover the unhappy paths the
-   issue's Proposed behavior section describes: empty states, errors, edge
-   cases.
+   verification method, written in the vocabulary of the run's surface and
+   executable by someone who has never seen the implementation. For `web`:
+   "pressing ArrowLeft moves the player one cell left; verify in the
+   browser". For `library`: "parse('') raises ValueError whose message
+   contains 'empty input'; verify by calling the installed package". For
+   `cli`: "passing no arguments prints usage to stderr and exits 2". Never
+   "movement works", never "handles empty input gracefully". Cover the
+   unhappy paths the issue's Proposed behavior section describes: empty
+   states, errors, edge cases.
 2. **Evaluator attacks** (opus, sees ONLY the issue body and the proposed
    contract): find missing edge cases, criteria too vague to verify, scope
    beyond the issue, criteria tagged to the wrong issue or integration
@@ -154,22 +203,36 @@ Phase 6 has anything to test.
 
 Loop, max `--max-rounds` (default 5) rounds:
 
-1. Start the app (dev server, simulator, CLI, whatever the project runs).
-2. Spawn the **evaluator** (opus, browser tools: claude-in-chrome MCP or
-   Playwright MCP; computer use for native apps). It receives ONLY:
-   the agreed contract, how to reach the running app, and the issue body.
-   Its role prompt:
+1. Start the running artifact the way the surface prescribes: run the dev
+   server, install the package into a clean environment, build the
+   executable, boot the service, or launch the simulator.
+2. Spawn the **evaluator** (opus) with the tools its surface needs: a browser
+   MCP for `web`, computer use for `native`, Bash for `library`, `cli`, and
+   `service`. It receives ONLY: the agreed contract, how to reach the running
+   artifact, and the issue body.
+
+   Its role prompt, keeping the bracketed clause that matches the surface:
 
    > You are a harsh, skeptical QA engineer. The builder's claims mean
-   > nothing; only what you observe in the running app counts. For EACH
-   > contract criterion: exercise it in the app like a demanding user.
-   > Click, type, use the keyboard, resize, try to break it. Check the
-   > console and network for errors while you do. Mark each criterion pass
-   > or fail in harness/contract.json. For every failure write into
-   > harness/critique.md: the criterion id, exact reproduction steps, what
-   > you observed, what the contract required. FORBIDDEN verdicts: "mostly
-   > works", "minor, acceptable", "fix later". A criterion passes or it
-   > fails. End with PASS (all criteria pass) or ROUND_FAILED.
+   > nothing; only what you observe counts. You have not read the
+   > implementation or the builder's tests, and you will not: everything you
+   > need is in the contract. For EACH contract criterion: exercise it
+   > against the running artifact like a demanding user.
+   >
+   > [web, native: click, type, use the keyboard, resize, try to break it.
+   > Check the console and network for errors while you do.]
+   >
+   > [library, cli, service: write throwaway scripts in harness/eval/ that
+   > drive the public surface exactly as a consumer would. Feed it empty,
+   > malformed, and boundary input. Assert on return values, exception types
+   > and messages, exit codes, stdout, and stderr.]
+   >
+   > Mark each criterion pass or fail in harness/contract.json. For every
+   > failure write into harness/critique.md: the criterion id, exact
+   > reproduction steps, what you observed, what the contract required.
+   > FORBIDDEN verdicts: "mostly works", "minor, acceptable", "fix later". A
+   > criterion passes or it fails. End with PASS (all criteria pass) or
+   > ROUND_FAILED.
 
 3. On PASS: exit the loop. Track pass/fail counts per issue across rounds;
    the evaluator judges the integrated app, but results are reported per
@@ -218,6 +281,13 @@ auto-fixable, link to the updated PR.
 - The evaluator never reads generator transcripts, and no agent other than
   the generator-evaluator pair (via the amendment rule) may modify agreed
   contract criteria. You do not weaken a criterion to make a round pass.
+- **The evaluator never runs the builder's test suite and never reads the
+  implementation.** Builder-written tests encode the builder's understanding,
+  so a green suite certifies whatever misunderstanding produced the bug. That
+  suite runs in Phase 5 as static verification; it is not evaluation. The
+  evaluator writes its own scripts, from the contract alone.
+- The evaluator's scripts stay in `harness/eval/`, uncommitted, and are never
+  merged into the project's test suite.
 - Stay within the scope set by the contract. Adjacent work becomes
   a follow-up note, not PR growth.
 - Never commit or push to the base branch directly; everything reaches it

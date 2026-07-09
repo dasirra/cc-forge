@@ -17,7 +17,7 @@ Interpret the input:
 2. **A path to a .md file** -> read it; that brief is the idea.
 3. **Free-form text** -> that text is the idea.
 
-## Phase 1: Grill
+## Phase 1: Interview
 
 Before the first question:
 
@@ -25,7 +25,7 @@ Before the first question:
   Explore subagent if the repo is non-trivial) so your questions and
   recommendations are grounded in what already exists.
 - Scope check: if the idea spans several independent features, say so and
-  help the user split it. Grill one feature at a time.
+  help the user split it. Interview one feature at a time.
 
 Interview rules:
 
