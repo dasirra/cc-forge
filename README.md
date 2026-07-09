@@ -35,6 +35,51 @@ The other two need:
 | `/forge:planning [path/to/spec.md \| description]` | A planner drafts an epic with user stories, a critic attacks it in a separate context, they iterate up to 3 rounds. Files the result as a GitHub epic with native sub-issues for async human review. |
 | `/forge:building <#issue ...> [--gate] [--max-rounds N] [--base <branch>] [--surface <name>]` | A generator and evaluator negotiate a granular contract of "done", a team builds in an isolated worktree, then the evaluator black-box tests the running artifact against that contract until it passes: driving a browser for a web app, calling the public API for a library, running argv and reading exit codes for a CLI. Opens a PR. |
 
+## Pipeline
+
+Adversarial pairs (⚔) never share context. They exchange files, relayed by the orchestrator. Every 👤 is a stop: the command hands you an artifact and prints the next step rather than running it.
+
+```mermaid
+flowchart TD
+    idea(["vague idea"]) --> INT
+
+    subgraph INT["/forge:interview"]
+        direction LR
+        i1["1 · Interview<br/>one question at a time,<br/>recommendation attached"] --> i2["2 · Synthesize"]
+    end
+
+    INT --> spec[/"docs/specs/YYYY-MM-DD-slug.md"/]
+    spec --> h1{{"👤 read the spec"}}
+    h1 --> PLAN
+
+    subgraph PLAN["/forge:planning"]
+        direction LR
+        p1["0-2 · Interpret,<br/>preconditions, recon"] --> p2["3 · planner ⚔ critic<br/>max 3 rounds"]
+        p2 --> p3["4 · file epic<br/>+ sub-issues"]
+    end
+
+    PLAN --> issues[/"GitHub epic + sub-issues"/]
+    issues --> h2{{"👤 edit + arbitrate on GitHub"}}
+    h2 --> BUILD
+
+    subgraph BUILD["/forge:building · one phase of issues per run"]
+        direction LR
+        b0["0.5 · Preflight<br/>gh + evaluation surface"] --> b1["1 · Isolated worktree"]
+        b1 --> b2["2 · generator ⚔ evaluator<br/>negotiate the contract<br/>max 3 exchanges"]
+        b2 --> b4["4 · sonnet builders,<br/>one per workstream"]
+        b4 --> b5["5 · Static checks"]
+        b5 --> b6["6 · evaluator black-box tests<br/>the running artifact<br/>max 5 rounds"]
+        b6 -.->|"ROUND_FAILED<br/>fresh fixer, sees only the critique"| b4
+        b6 --> b7["7 · PR<br/>8 · /code-review high --fix"]
+    end
+
+    BUILD --> pr[/"pull request"/]
+    pr --> h3{{"👤 review + merge"}}
+    h3 -.->|"next phase"| BUILD
+```
+
+The contract negotiated in Phase 2 is the only plan `/forge:building` makes. There is no PLAN.md. Technical decisions belong to the builders, made against the code as they work, and Phase 6 judges the result against the contract rather than against the builders' account of it.
+
 ## Design
 
 Three ideas run through all three commands.

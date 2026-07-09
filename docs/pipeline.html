@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Forge · pipeline reference</title>
+<style>
+  :root {
+    --ground: #F4F6F5;
+    --panel: #FFFFFF;
+    --ink: #1B2523;
+    --ink-soft: #55645F;
+    --line: #D8E0DD;
+    --plan: #3D5A9E;
+    --plan-soft: #EBF0F9;
+    --build: #0E7C6B;
+    --build-soft: #E6F3F0;
+    --human: #B0680F;
+    --human-soft: #FBF1E2;
+    --adv: #B3364B;
+    --adv-soft: #F9E9EC;
+    --chip-opus: #4C3D8F;
+    --chip-opus-bg: #EDEAF8;
+    --chip-sonnet: #2F6D8C;
+    --chip-sonnet-bg: #E7F1F6;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+    --sans: "Avenir Next", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #101514; --panel: #1A211F; --ink: #E3EBE8; --ink-soft: #93A29D;
+      --line: #2C3733;
+      --plan: #8FA9E0; --plan-soft: #202A3D;
+      --build: #5BC0AC; --build-soft: #16302B;
+      --human: #E0A45C; --human-soft: #33260F;
+      --adv: #E07A8E; --adv-soft: #391B21;
+      --chip-opus: #B4A6EE; --chip-opus-bg: #272040;
+      --chip-sonnet: #8CC3DE; --chip-sonnet-bg: #16303C;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: var(--sans); font-size: 15px; line-height: 1.5;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 40px 24px 72px; }
+
+  header .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--ink-soft);
+  }
+  header h1 {
+    font-size: clamp(26px, 4vw, 36px); font-weight: 600; margin: 6px 0 4px;
+    text-wrap: balance; letter-spacing: -.01em;
+  }
+  header p.sub { color: var(--ink-soft); margin: 0 0 18px; max-width: 62ch; }
+  header p.sub a { color: inherit; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 36px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 11px; padding: 3px 9px;
+    border-radius: 4px; white-space: nowrap;
+  }
+  .chip.opus   { color: var(--chip-opus);   background: var(--chip-opus-bg); }
+  .chip.sonnet { color: var(--chip-sonnet); background: var(--chip-sonnet-bg); }
+  .chip.human  { color: var(--human); background: var(--human-soft); }
+  .chip.adv    { color: var(--adv);   background: var(--adv-soft); }
+  .chip.loop   { color: var(--ink-soft); border: 1px solid var(--line); background: transparent; }
+  .chip.art    { color: var(--ink-soft); border: 1px dashed var(--line); background: transparent; }
+
+  /* ---------- overview rail ---------- */
+  .rail-scroll { overflow-x: auto; padding-bottom: 8px; margin-bottom: 8px; }
+  .rail { display: flex; align-items: stretch; gap: 0; min-width: 900px; }
+  .stop {
+    flex: 1; position: relative; padding: 14px 18px 14px 22px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+  }
+  .stop + .arrow { align-self: center; padding: 0 6px; color: var(--ink-soft); flex: none; }
+  .stop .k {
+    font-family: var(--mono); font-size: 12px; font-weight: 600; display: block;
+  }
+  .stop .d { font-size: 12px; color: var(--ink-soft); display: block; margin-top: 2px; }
+  .stop::before {
+    content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px;
+    border-radius: 2px; background: var(--ink-soft);
+  }
+  .stop.s-human::before { background: var(--human); }
+  .stop.s-plan::before  { background: var(--plan); }
+  .stop.s-build::before { background: var(--build); }
+  .zones { display: flex; min-width: 900px; margin-bottom: 40px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+  .zones span { border-top: 2px solid var(--line); padding-top: 6px; }
+  .zones .z-hil   { flex: 2.05; border-top-color: var(--human); color: var(--human); }
+  .zones .z-afk1  { flex: 2.05; margin-left: 12px; }
+  .zones .z-sign  { flex: 1;   margin-left: 12px; border-top-color: var(--human); color: var(--human); }
+  .zones .z-afk2  { flex: 2.05; margin-left: 12px; }
+  .zones .z-merge { flex: 1;   margin-left: 12px; border-top-color: var(--human); color: var(--human); }
+
+  /* ---------- command columns ---------- */
+  .cols { display: grid; grid-template-columns: 1fr 1.05fr; gap: 28px; align-items: stretch; }
+  @media (max-width: 860px) { .cols { grid-template-columns: 1fr; } }
+  .stack { display: flex; flex-direction: column; gap: 28px; }
+  .stack .planning { flex: 1; }
+
+  .head .stepnum {
+    display: inline-flex; width: 24px; height: 24px; border-radius: 50%;
+    align-items: center; justify-content: center; font-size: 13px;
+    margin-right: 9px; color: var(--panel); vertical-align: 2px;
+  }
+  .interview .stepnum { background: var(--human); }
+  .planning  .stepnum { background: var(--plan); }
+  .building  .stepnum { background: var(--build); }
+
+  .cmd { border: 1px solid var(--line); border-radius: 12px; background: var(--panel); overflow: hidden; }
+  .cmd > .head { padding: 18px 22px 14px; border-bottom: 1px solid var(--line); }
+  .cmd > .head h2 { margin: 0; font-size: 20px; font-weight: 600; font-family: var(--mono); }
+  .cmd > .head p { margin: 4px 0 0; font-size: 13px; color: var(--ink-soft); }
+  .cmd.planning > .head h2 { color: var(--plan); }
+  .cmd.building > .head h2 { color: var(--build); }
+  .cmd.interview > .head h2 { color: var(--human); }
+  .interview .dot { background: var(--human); }
+  .duel .actor.human { color: var(--human); background: var(--human-soft); }
+
+  .phases { padding: 18px 22px 22px; position: relative; }
+  .phase { position: relative; padding: 0 0 18px 34px; }
+  .phase:last-child { padding-bottom: 0; }
+  /* spine */
+  .phase::before {
+    content: ""; position: absolute; left: 10px; top: 22px; bottom: -2px; width: 2px;
+    background: var(--line);
+  }
+  .phase:last-child::before { display: none; }
+  .phase .dot {
+    position: absolute; left: 0; top: 2px; width: 22px; height: 22px; border-radius: 50%;
+    font-family: var(--mono); font-size: 10.5px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--panel);
+  }
+  .phase .dot.narrow { font-size: 8px; letter-spacing: -.03em; }
+  .planning .dot { background: var(--plan); }
+  .building .dot { background: var(--build); }
+  .phase.gate .dot { background: var(--human); }
+
+  .phase h3 { margin: 0; font-size: 14.5px; font-weight: 600; }
+  .phase h3 .opt { font-weight: 400; color: var(--ink-soft); font-size: 12.5px; }
+  .phase p { margin: 3px 0 7px; font-size: 13px; color: var(--ink-soft); max-width: 52ch; }
+  .phase .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .loopnote {
+    margin-top: 8px; font-family: var(--mono); font-size: 11px;
+    color: var(--adv); display: flex; align-items: center; gap: 6px;
+  }
+  .loopnote.neutral { color: var(--ink-soft); }
+
+  /* two actors iterating: [A] to [B] */
+  .duel { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 8px 0 2px; }
+  .duel .actor {
+    font-family: var(--mono); font-size: 11px; font-weight: 600;
+    padding: 6px 11px; border-radius: 6px; white-space: nowrap;
+  }
+  .duel .actor.opus   { color: var(--chip-opus);   background: var(--chip-opus-bg); }
+  .duel .actor.sonnet { color: var(--chip-sonnet); background: var(--chip-sonnet-bg); }
+  .duel .flow {
+    display: flex; flex-direction: column; align-items: center;
+    font-family: var(--mono); font-size: 10px; color: var(--ink-soft); line-height: 1.5;
+  }
+  .duel .flow .fwd::after  { content: " \2192"; color: var(--adv); }
+  .duel .flow .bck::before { content: "\2190 "; color: var(--adv); }
+
+  /* ---------- surfaces ---------- */
+  .surfaces { margin-top: 36px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); padding: 18px 22px 20px; }
+  .surfaces h4 { margin: 0 0 4px; font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--build); }
+  .surfaces > p { margin: 0 0 14px; font-size: 12.5px; color: var(--ink-soft); max-width: 78ch; }
+  .surfaces table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .surfaces th, .surfaces td { text-align: left; padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .surfaces th { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); font-weight: 600; }
+  .surfaces tr:last-child td { border-bottom: none; }
+  .surfaces td.s { font-family: var(--mono); color: var(--build); white-space: nowrap; }
+  .surfaces td:not(.s) { color: var(--ink-soft); }
+
+  /* ---------- footnotes ---------- */
+  .notes { margin-top: 36px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media (max-width: 860px) { .notes { grid-template-columns: 1fr; } }
+  .note { border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; background: var(--panel); }
+  .note h4 {
+    margin: 0 0 6px; font-family: var(--mono); font-size: 11px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase;
+  }
+  .note.adv-n h4 { color: var(--adv); }
+  .note.hum-n h4 { color: var(--human); }
+  .note.sep-n h4 { color: var(--ink-soft); }
+  .note p, .note ul { margin: 0; font-size: 12.5px; color: var(--ink-soft); }
+  .note ul { padding-left: 16px; }
+  .note li { margin-bottom: 3px; }
+  .note li strong { color: var(--ink); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <span class="eyebrow">Pipeline reference · forge@cc-forge · 2026-07-09</span>
+  <h1>/forge:interview + /forge:planning + /forge:building, as currently written</h1>
+  <p class="sub">Every phase, agent, artifact, and loop in the three commands. Adversarial pairs never share context; they exchange files, relayed by the orchestrator. Source: <a href="https://github.com/dasirra/cc-forge">github.com/dasirra/cc-forge</a>.</p>
+  <div class="legend">
+    <span class="chip opus">opus agent</span>
+    <span class="chip sonnet">sonnet agent</span>
+    <span class="chip human">👤 human touchpoint</span>
+    <span class="chip adv">⚔ adversarial pair</span>
+    <span class="chip loop">↺ bounded loop</span>
+    <span class="chip art">artifact / file</span>
+  </div>
+</header>
+
+<section aria-label="End-to-end overview">
+  <div class="rail-scroll">
+    <div class="rail">
+      <div class="stop s-human"><span class="k">/forge:interview</span><span class="d">relentless interview → docs/specs/&lt;slug&gt;.md</span></div>
+      <div class="arrow">→</div>
+      <div class="stop s-plan"><span class="k">/forge:planning</span><span class="d">adversarial PM plan → GitHub issues</span></div>
+      <div class="arrow">→</div>
+      <div class="stop s-human"><span class="k">👤 review</span><span class="d">edit + arbitrate issues on GitHub</span></div>
+      <div class="arrow">→</div>
+      <div class="stop s-build"><span class="k">/forge:building</span><span class="d">one phase per run → PR</span></div>
+      <div class="arrow">→</div>
+      <div class="stop s-human"><span class="k">👤 review</span><span class="d">merge PR, repeat per phase</span></div>
+    </div>
+  </div>
+  <div class="rail-scroll">
+    <div class="zones">
+      <span class="z-hil">human in the loop</span>
+      <span class="z-afk1">agents · async review</span>
+      <span class="z-sign">human</span>
+      <span class="z-afk2">agents · afk</span>
+      <span class="z-merge">human</span>
+    </div>
+  </div>
+</section>
+
+<div class="cols">
+
+<div class="stack">
+<!-- ================= INTERVIEW ================= -->
+<section class="cmd interview" aria-label="/forge:interview phases">
+  <div class="head">
+    <h2><span class="stepnum">1</span>/forge:interview</h2>
+    <p>The human-in-the-loop alignment phase. One question at a time, recommendation attached; output is a spec at PM altitude.</p>
+  </div>
+  <div class="phases">
+
+    <div class="phase">
+      <span class="dot">1</span>
+      <h3>Interview 👤</h3>
+      <p>Explore the codebase first; answer from it instead of asking. Scope check, then walk the decision tree at product altitude: behavior, edge states, scope, success criteria. Technical unknowns get parked, not asked.</p>
+      <div class="duel">
+        <span class="actor human">👤 you</span>
+        <span class="flow"><span class="fwd">answer</span><span class="bck">question + recommendation</span></span>
+        <span class="actor opus">interviewer</span>
+      </div>
+      <div class="loopnote">↺ until shared understanding · "wrap it up" → auto-answer the rest, listed</div>
+    </div>
+
+    <div class="phase">
+      <span class="dot">2</span>
+      <h3>Synthesize</h3>
+      <p>No further interviewing. Problem, solution from the user's perspective, extensive user stories, key decisions with why, out of scope, open questions. Self-review: placeholders, contradictions, ambiguity, scope. Saved to <code>docs/specs/</code>; prints the next step, never runs it.</p>
+      <div class="chips"><span class="chip art">YYYY-MM-DD-&lt;slug&gt;.md</span><span class="chip art">→ /forge:planning &lt;path&gt;</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= PLANNING ================= -->
+<section class="cmd planning" aria-label="/forge:planning phases">
+  <div class="head">
+    <h2><span class="stepnum">2</span>/forge:planning</h2>
+    <p>PM altitude only. User stories and observable behavior; never files, schemas, or architecture.</p>
+  </div>
+  <div class="phases">
+
+    <div class="phase">
+      <span class="dot">0</span>
+      <h3>Interpret the input</h3>
+      <p>Conversation, spec.md path, or free-form text → problem statement + capability list. Ambiguous or multi-feature input gets split first.</p>
+    </div>
+
+    <div class="phase">
+      <span class="dot">1</span>
+      <h3>Preconditions</h3>
+      <p>GitHub remote, gh auth, <code>epic</code> label, mirror repo conventions.</p>
+    </div>
+
+    <div class="phase">
+      <span class="dot">2</span>
+      <h3>Light reality check <span class="opt">· optional</span></h3>
+      <p>One Explore subagent: what does the product do today in this area? Product-level findings only.</p>
+      <div class="chips"><span class="chip sonnet">Explore</span></div>
+    </div>
+
+    <div class="phase">
+      <span class="dot">3</span>
+      <h3>Plan negotiation ⚔</h3>
+      <p>Fresh contexts, artifacts only. The planner drafts goal, user stories, mermaid flows, and 3-8 sub-issues in shippable phases; the critic sees only plan.md and attacks missing scope, unverifiable criteria, wrong granularity. Every revision comes from a fresh planner, never the original.</p>
+      <div class="duel">
+        <span class="actor opus">planner · opus</span>
+        <span class="flow"><span class="fwd">plan.md</span><span class="bck">critique.md</span></span>
+        <span class="actor opus">critic · opus</span>
+      </div>
+      <div class="loopnote">↺ max 3 rounds · APPROVED, or disagreements travel as Contested notes</div>
+    </div>
+
+    <div class="phase">
+      <span class="dot">4</span>
+      <h3>Create on GitHub</h3>
+      <p>Epic + child issues. Placeholder tokens resolved into cross-references; native sub-issue links wire the DAG.</p>
+      <div class="chips"><span class="chip art">epic + issues</span></div>
+    </div>
+
+    <div class="phase gate">
+      <span class="dot">5</span>
+      <h3>Report → 👤</h3>
+      <p>Child table, critique trail, contested items, and the runbook with the phase order and critical path. Review and edit the issues on GitHub, arbitrate contested items; prints the next step, never runs it.</p>
+      <div class="chips"><span class="chip human">👤 async review on GitHub</span><span class="chip art">→ /forge:building #a #b · one phase per run</span></div>
+    </div>
+
+  </div>
+</section>
+
+</div>
+
+<!-- ================= BUILDING ================= -->
+<section class="cmd building" aria-label="/forge:building phases">
+  <div class="head">
+    <h2><span class="stepnum">3</span>/forge:building</h2>
+    <p>One phase of issues per run: one worktree, one contract, one PR. No upfront technical plan; the contract is the plan. Evaluator never sees generator transcripts.</p>
+  </div>
+  <div class="phases">
+
+    <div class="phase">
+      <span class="dot">0</span>
+      <h3>Interpret the request</h3>
+      <p>Load issues via gh; summarize the user stories and acceptance criteria extracted.</p>
+    </div>
+
+    <div class="phase">
+      <span class="dot narrow">0.5</span>
+      <h3>Preflight</h3>
+      <p>Everything that can stop the run, resolved before a worktree, a contract, or an issue comment exists. gh auth and remote; then the evaluation surface, inferred from the repo and confirmed with you. <code>web</code> is the only surface with an external dependency, and it gets checked here rather than in Phase 6.</p>
+      <div class="chips"><span class="chip human">👤 confirm the surface</span><span class="chip art">--surface skips the question</span></div>
+    </div>
+
+    <div class="phase">
+      <span class="dot">1</span>
+      <h3>Base branch + worktree</h3>
+      <p>Fresh isolated worktree; shared state in <code>harness/</code> (gitignored).</p>
+      <div class="chips"><span class="chip art">contract.json</span><span class="chip art">critique.md</span><span class="chip art">progress.json</span><span class="chip art">eval/</span></div>
+    </div>
+
+    <div class="phase">
+      <span class="dot">2</span>
+      <h3>Contract negotiation ⚔</h3>
+      <p>What "done" means: 10-20 observable criteria per issue + 3-8 integration criteria, each carrying a verification method written in the surface's vocabulary. The evaluator sees only issue + proposed contract and attacks vagueness, wrong tagging, weak tests. Agreed criteria post per-issue to GitHub; amendments only through this channel.</p>
+      <div class="duel">
+        <span class="actor opus">generator · opus</span>
+        <span class="flow"><span class="fwd">contract.json</span><span class="bck">objections</span></span>
+        <span class="actor opus">evaluator · opus</span>
+      </div>
+      <div class="chips"><span class="chip art">agreed contract → per-issue comments</span></div>
+      <div class="loopnote">↺ max 3 exchanges · dispute → stricter version wins</div>
+    </div>
+
+    <div class="phase gate">
+      <span class="dot">3</span>
+      <h3>Human gate <span class="opt">· only with --gate</span></h3>
+      <p>Default is autonomous; the contract is already on the issue for async inspection.</p>
+      <div class="chips"><span class="chip human">👤 optional approval</span></div>
+    </div>
+
+    <div class="phase">
+      <span class="dot">4</span>
+      <h3>Execution</h3>
+      <p>No technical plan, no PLAN.md: the contract is the plan. The lead splits criteria into workstreams with file territories inline; one sonnet teammate per workstream makes its own technical decisions against live code.</p>
+      <div class="chips"><span class="chip sonnet">builders · sonnet × N</span><span class="chip art">progress.json</span></div>
+    </div>
+
+    <div class="phase">
+      <span class="dot">5</span>
+      <h3>Static verification</h3>
+      <p>Build, tests, lint, types. Real output only; the artifact must start before Phase 6. The builders' own tests run here, and here only. They are not evaluation.</p>
+    </div>
+
+    <div class="phase">
+      <span class="dot">6</span>
+      <h3>Behavioral evaluation ⚔ <span class="opt">· the core</span></h3>
+      <p>A fresh evaluator exercises every criterion black-box through the surface: driving a browser, calling the public API, or running argv and reading exit codes. It has not read the implementation and does not run the builders' tests. Pass/fail per criterion, per issue; each round's fixer is fresh and sees the critique, never the evaluator's transcript.</p>
+      <div class="duel">
+        <span class="actor opus">evaluator · opus</span>
+        <span class="flow"><span class="fwd">critique.md</span><span class="bck">fixed build</span></span>
+        <span class="actor sonnet">fixer · sonnet</span>
+      </div>
+      <div class="loopnote">↺ max 5 rounds · same criterion fails 3× → delete &amp; rebuild that feature</div>
+    </div>
+
+    <div class="phase">
+      <span class="dot">7</span>
+      <h3>Pull request</h3>
+      <p>Commit, push, PR against base. Body carries per-issue contract results, rounds used, amendments. Final contract state posted to each issue (own criteria only).</p>
+      <div class="chips"><span class="chip art">PR · closes #issues</span></div>
+    </div>
+
+    <div class="phase gate">
+      <span class="dot">8</span>
+      <h3>Integrated review → 👤</h3>
+      <p><code>/code-review high --fix</code> on the whole PR: the only agent that reads the final code as code, and the only catcher of cross-workstream defects. Then the human reviews and merges.</p>
+      <div class="chips"><span class="chip sonnet">/code-review high</span><span class="chip human">👤 review &amp; merge</span></div>
+    </div>
+
+  </div>
+</section>
+</div>
+
+<section class="surfaces">
+  <h4>Evaluation surfaces</h4>
+  <p>The contract is verified by observing the running artifact from outside. What "outside" means depends on what the project ships, so Phase 0.5 resolves it before anything expensive happens. Only <code>web</code> needs a browser automation MCP server.</p>
+  <table>
+    <thead>
+      <tr><th>Surface</th><th>Start it by</th><th>The evaluator observes by</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="s">web</td><td>running the dev server</td><td>driving a browser</td></tr>
+      <tr><td class="s">library</td><td>installing the package into a clean environment</td><td>calling the public API from throwaway scripts</td></tr>
+      <tr><td class="s">cli</td><td>building or installing the executable</td><td>running it as a subprocess: argv, stdin, stdout, stderr, exit codes</td></tr>
+      <tr><td class="s">service</td><td>booting the server</td><td>issuing real requests against its endpoints</td></tr>
+      <tr><td class="s">native</td><td>launching the app or simulator</td><td>computer use</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="notes">
+  <div class="note adv-n">
+    <h4>⚔ Adversarial pairs</h4>
+    <ul>
+      <li><strong>planner vs critic</strong> · /forge:planning P3, PM plan quality</li>
+      <li><strong>generator vs evaluator</strong> · /forge:building P2, what "done" means</li>
+      <li><strong>evaluator vs fixer</strong> · /forge:building P6, running artifact vs contract</li>
+    </ul>
+  </div>
+  <div class="note hum-n">
+    <h4>👤 Human touchpoints</h4>
+    <ul>
+      <li><strong>/forge:interview</strong> · the alignment that can't be delegated</li>
+      <li><strong>surface confirmation</strong> · one question in preflight</li>
+      <li><strong>issue review</strong> · edit + arbitrate on GitHub before /forge:building</li>
+      <li><strong>--gate</strong> · optional contract approval</li>
+      <li><strong>PR review &amp; merge</strong> · per phase, taste + QA</li>
+    </ul>
+  </div>
+  <div class="note sep-n">
+    <h4>Separation rule</h4>
+    <p>Critics and evaluators receive artifacts only, never the other agent's transcript, reasoning, self-assessment, implementation, or tests. Muddied context produces rubber-stamp evaluations, and a builder's green test suite certifies whatever misunderstanding produced the bug. Contracts change only via the amendment channel; never weakened to make a round pass.</p>
+  </div>
+</div>
+</div>
+
+</body>
+</html>
