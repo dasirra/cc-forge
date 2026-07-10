@@ -18,11 +18,13 @@ $ARGUMENTS
 ## Operating principles
 
 - **PM altitude only.** Issues contain user stories, goals, human-readable
-  acceptance criteria, proposed behavior, scope boundaries, and dependencies.
-  NEVER file paths, schemas, function names, libraries, or architecture.
-  Granular testable contracts are negotiated adversarially at /forge:building time,
-  against the codebase as it exists then. Freezing them now would let them go
-  stale.
+  acceptance criteria, proposed behavior, scope boundaries, dependencies, and a
+  Grounding block. NEVER schemas, libraries, or architecture, and no file paths
+  or function names outside Grounding. Granular testable contracts are negotiated
+  adversarially at /forge:building time, against the codebase as it exists then.
+  Freezing them now would let them go stale. Grounding is different: it records
+  what already exists, and a fact does not go stale, it becomes false and fails
+  its check loudly.
 - **Issues must be self-sufficient for review.** A human reading only the
   GitHub issues must be able to understand the full proposed solution: what
   will be built, how it behaves, and why. Use prose plus mermaid diagrams of
@@ -70,13 +72,18 @@ Read the repo's existing conventions so you mirror them:
 - If an existing epic is present, read its body
   (`gh issue view <n> --json body`) and copy its structure.
 
-## Phase 2: Light reality check (optional, bounded)
+## Phase 2: Grounding and reality check (bounded; skip only if greenfield)
 
 Dispatch ONE Explore sub-agent with a narrow question: what does this product
 currently do in the area the feature touches, and what adjacent capabilities
-already exist? This is for the critic's feasibility judgment and for sane
-phase ordering ONLY. Its findings must never leak file paths or technical
-detail into issue bodies. For a greenfield project, skip this phase.
+already exist? This serves the critic's feasibility judgment, sane phase
+ordering, and grounding. If the spec carries a Grounding section, verify each
+entry still holds against the repo; either way, produce a grounding table:
+every capability, store, or system the plan treats as already existing,
+confirmed with a file or symbol reference, or explicitly marked NEW. Grounding
+facts, including the reference that proves them, are the one kind of technical
+content permitted into issue bodies, quoted in each child's Grounding block. No
+other technical detail may leak. For a greenfield project, skip this phase.
 
 ## Phase 3: Planner drafts (subagent, fresh context)
 
@@ -243,6 +250,12 @@ is trivially linear.>
 ## Out of scope
 - ...
 
+## Grounding
+<facts only, from the planning grounding table: the existing systems this
+issue reads or extends, by name and location, and anything it must CREATE
+because it does not exist, marked NEW. Omit only if the issue touches
+nothing that outlives its own PR.>
+
 ## Dependencies
 **Blocked by** #<...>. **Blocks** #<...>.
 
@@ -282,8 +295,10 @@ Startable first (no deps): #<...>
 
 ## Guardrails
 
-- No technical content in any issue body. If the planner leaks it, strip it
-  before filing.
+- No technical decisions in any issue body. The Grounding block is exempt: it
+  carries verified facts about existing systems, with their locations. If the
+  planner leaks a decision, strip it before filing; if it leaks a fact, move it
+  into Grounding instead of deleting it.
 - Diagrams and solution descriptions stay at product level: user flows,
   states, interactions. No component diagrams, no data models, no API
   shapes. If a diagram names a file, table, or endpoint, redraw it.

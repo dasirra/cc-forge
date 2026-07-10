@@ -106,6 +106,8 @@ flowchart TD
 
 The contract negotiated in Phase 2 is the only plan `/forge:building` makes. There is no PLAN.md. Technical decisions belong to the builders, made against the code as they work, and Phase 6 judges the result against the contract rather than against the builders' account of it.
 
+Facts are the exception, because a fact is not a decision. Before it writes a single criterion, the generator declares every store, path, env var, collection, and dependency its contract will name, each marked `EXISTS` with `file:line` evidence or `NEW`. The lead reproduces each `EXISTS` with a grep, and any `NEW` persistent substrate stops the run for one human question, gate or no gate. Deferring a decision keeps options open; deferring a fact just means somebody downstream invents it, and inventing and discovering look identical from inside a contract.
+
 Every phase, agent, artifact, and loop is laid out in the [full pipeline reference](https://htmlpreview.github.io/?https://github.com/dasirra/cc-forge/blob/main/docs/pipeline.html), which also documents the evaluation surfaces. Source: [`docs/pipeline.html`](docs/pipeline.html).
 
 ## Design

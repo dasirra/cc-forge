@@ -23,7 +23,10 @@ Before the first question:
 
 - If you are inside a codebase the idea touches, explore it first (use an
   Explore subagent if the repo is non-trivial) so your questions and
-  recommendations are grounded in what already exists.
+  recommendations are grounded in what already exists. Record what you
+  find: every existing system, store, or dataset the idea would consume
+  or extend goes into the spec's Grounding section as a fact, whether or
+  not any question depends on it.
 - Scope check: if the idea spans several independent features, say so and
   help the user split it. Interview one feature at a time.
 
@@ -40,10 +43,12 @@ Interview rules:
   yourself and move on instead of asking.
 - **Stay at product altitude**: users and actors, behavior, empty/error/edge
   states, scope boundaries, success criteria, priorities, rollout. Do NOT ask
-  about schemas, file paths, libraries, or architecture; /forge:planning bans that
-  content and /forge:building negotiates it against the codebase later. If a
-  technical unknown genuinely blocks a product decision, record it as a
-  deferred question and continue.
+  the user to *decide* schemas, libraries, or architecture; /forge:planning bans
+  those decisions and /forge:building negotiates them against the codebase later.
+  Do ask, or better, go and read, where an existing system the feature will
+  consume already lives: that is a fact, not a decision, and it belongs in
+  Grounding. If a technical unknown genuinely blocks a product decision, record
+  it as a deferred question and continue.
 - When a decision has 2-3 genuinely different viable shapes, present them as
   options with trade-offs before asking, recommendation first.
 - The user can end the interview at any time ("wrap it up", "answer the rest
@@ -81,6 +86,13 @@ error, and edge states>
 <every decision made during the grilling, including recommendations the
 user accepted; mark auto-answered ones with "(auto)" >
 
+## Grounding (facts, not decisions)
+<every existing system the feature consumes or extends: what it is, where
+it lives, and whether the capability the feature needs exists there today
+or must be added. Anything the feature needs that does not exist anywhere
+yet is listed here marked NEW. This section records the world as found; it
+decides nothing>
+
 ## Out of scope
 <explicit rejections and deferrals, each with its one-line reason; this is
 what gives /forge:planning a definition of done>
@@ -90,8 +102,11 @@ what gives /forge:planning a definition of done>
 /forge:planning critic and the /forge:building negotiation to pick up>
 ````
 
-No technical content beyond the deferred notes in Open questions: no file
-paths, schemas, function names, or architecture anywhere else.
+No technical decisions anywhere: no schemas, no architecture, no chosen
+libraries. The Grounding section is the one exemption, and it may name
+files, stores, and functions because it records what already exists, not
+what to build. Outside Grounding and the deferred notes in Open questions,
+no technical content at all.
 
 Self-review before saving, fix inline, no re-review:
 

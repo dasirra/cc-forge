@@ -30,9 +30,11 @@ rubber-stamp evaluations.
 
 All shared state lives in `harness/` inside the worktree (gitignored):
 
-- `harness/contract.json`: `{surface, criteria}`. `surface` is the evaluation
-  surface resolved in Phase 0.5, recorded once so a resumed run never
-  re-derives it. Each criterion is
+- `harness/contract.json`: `{surface, grounding, criteria}`. `surface` is the
+  evaluation surface resolved in Phase 0.5, recorded once so a resumed run never
+  re-derives it. `grounding` is the array of substrate the contract stands on,
+  each entry `{name, status: EXISTS|NEW, evidence, human_ack}`; see Phase 2.
+  Each criterion is
   `{id, issue, criterion, verify_how, status: proposed|agreed|pass|fail}`.
   `issue` is the issue number the criterion belongs to, or `"integration"`
   for cross-issue behavior. Single-issue and free-form runs use one issue
@@ -125,7 +127,21 @@ granular, testable contract. Two subagents, separate contexts, artifacts
 only.
 
 1. **Generator proposes** (opus): given the issue bodies and read access to
-   the codebase, write `harness/contract.json` with 10-20 granular criteria
+   the codebase, write `harness/contract.json`.
+
+   Before any criterion, write the `grounding` block: every store, file path,
+   env var, collection, table, endpoint, package, or external system that any
+   criterion or fixture will name, each entry `{name, status: EXISTS|NEW,
+   evidence}`. EXISTS requires evidence: a `file:line` in the current worktree
+   that names the thing. NEW means this run creates it. Start from the issue's
+   Grounding block if it has one; contradicting that block is allowed only by
+   surfacing the contradiction, never by silently overriding it. Inventing a
+   substrate is sometimes right, and the generator cannot tell the difference
+   from the inside: an issue that needs a store the project lacks and an issue
+   whose store it simply failed to find look identical while writing criteria.
+   That is what `status` is for. Declare, do not decide.
+
+   Then write 10-20 granular criteria
    PER ISSUE, each tagged with its `issue`, plus 3-8 `integration` criteria
    covering behavior that spans issues (only for multi-issue runs). Never
    dilute: three issues means roughly 40-60 criteria, not 30 split three
@@ -139,11 +155,35 @@ only.
    "movement works", never "handles empty input gracefully". Cover the
    unhappy paths the issue's Proposed behavior section describes: empty
    states, errors, edge cases.
+1.5 **Lead verifies grounding mechanically** (you, before relaying the
+   contract). This is a grep, not a judgment. For each EXISTS entry, run
+   `git grep -n <name>` (or `test -e` for paths) and confirm the cited
+   evidence. An EXISTS entry with no hit goes back to the generator: do not
+   relay a contract whose premises you could not reproduce. Then scan the
+   fixtures and every `verify_how` for substrate-shaped tokens (ALL_CAPS
+   identifiers, slash paths, collection and table names, URLs, package names)
+   and confirm each appears in `grounding`. A token with no entry blocks the
+   relay.
+
+   Any NEW entry naming persistent substrate (a store, schema, collection, env
+   var, or external dependency) is escalated to the human with AskUserQuestion
+   before the evaluator sees the contract, **gate or no gate**: "this contract
+   invents `<X>`; confirm nothing existing should serve instead." Record the
+   grep output and the human's answer in `harness/progress.json`, and set
+   `human_ack` on the entry. This is the run's one mandatory pause besides the
+   Phase 0.5 surface question, and it exists for the same reason: a wrong
+   answer here poisons everything downstream, and it costs a minute to ask.
+
 2. **Evaluator attacks** (opus, sees ONLY the issue body and the proposed
    contract): find missing edge cases, criteria too vague to verify, scope
    beyond the issue, criteria tagged to the wrong issue or integration
-   behavior missing entirely, and tests that would pass while the feature
-   is broken.
+   behavior missing entirely, tests that would pass while the feature
+   is broken, and **ungrounded substrate**: any store, path, env var,
+   collection, endpoint, or dependency named in a criterion or fixture that is
+   absent from the `grounding` block, or marked EXISTS without evidence, is a
+   BLOCKING objection. You cannot read the code, and you do not need to: the
+   grounding block's quoted evidence is an artifact, and a noun with no entry
+   is visible from where you sit.
    Write objections into the contract file. If sound, mark all criteria
    `agreed`.
 3. Iterate: hand objections to the generator, revise, re-attack. Max 3
@@ -165,16 +205,24 @@ hard.
 
 Default: no pause. The agreed contract is already posted to the issue
 (Phase 2), so the human can inspect it asynchronously, and the run continues
-autonomously into execution.
+autonomously into execution. The NEW-substrate escalation in Phase 2 step 1.5
+is not part of this gate and fires regardless.
 
-If `--gate` was passed: show the user the agreed contract (criteria list
-plus any disputes) and wait for approval or adjustments before building.
+If `--gate` was passed: show the user the agreed contract, in this order: the
+grounding block (NEW entries first), the evaluator's residual risks, then the
+criteria list and any disputes. Wait for approval or adjustments before
+building. In the ungated default, the issue comment posted in Phase 2 leads
+with the same grounding block and residual risks, above the criteria. A human
+skims what he is shown first; show him the premises, not the paperwork.
 
 ## Phase 4: Execution (sonnet team, straight from the contract)
 
 There is no technical planning phase and no PLAN.md: the contract is the
 plan, and technical decisions belong to the builders, made against the code
-as they work. As lead, do the split inline before spawning anyone:
+as they work. The `grounding` block is the one exception: which existing
+system a criterion reads or extends is a verified fact, fixed in Phase 2, and
+not a builder's to re-decide. As lead, do the split inline before spawning
+anyone:
 
 - Group the contract criteria into workstreams (often just one for
   issue-sized work) and give each workstream a file territory, so parallel
@@ -281,6 +329,12 @@ auto-fixable, link to the updated PR.
 - The evaluator never reads generator transcripts, and no agent other than
   the generator-evaluator pair (via the amendment rule) may modify agreed
   contract criteria. You do not weaken a criterion to make a round pass.
+- **Never relay a contract whose grounding you have not reproduced.** An EXISTS
+  entry is a claim about the world; you check it with a command, not with
+  trust. A criterion can be re-attacked in a later round, but a false premise
+  is silently inherited by every criterion written on top of it, and by every
+  sibling issue that builds on the same substrate afterwards. A fact does not
+  go stale the way a design does; it becomes false and fails its grep.
 - **The evaluator never runs the builder's test suite and never reads the
   implementation.** Builder-written tests encode the builder's understanding,
   so a green suite certifies whatever misunderstanding produced the bug. That
