@@ -247,7 +247,7 @@ anyone:
   density.
 
 Cross-workstream integration defects are caught by the behavioral
-evaluation (Phase 6) and the final integrated review (Phase 8), not here.
+evaluation (Phase 6), not here.
 If the split reveals the request is ambiguous, ask before building.
 
 ## Phase 5: Static verification
@@ -324,15 +324,6 @@ Loop, max `--max-rounds` (default 5) rounds:
 3. Post the final contract state (passes, rounds, amendments) as a comment
    on each issue, its own criteria only.
 4. Return the PR URL to the user.
-
-## Phase 8: Final integrated review
-
-Run `/code-review high <PR#> --fix` against the open PR: this is the gate
-for the whole integrated diff, the only reader of the final code as code,
-and the catcher of cross-workstream defects no single teammate could see.
-Commit and push the fixes, re-run the static
-checks, and summarize: findings applied, findings flagged but not
-auto-fixable, link to the updated PR.
 
 ## Guardrails
 
