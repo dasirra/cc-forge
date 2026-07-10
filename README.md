@@ -55,7 +55,7 @@ The other two need:
 |---------|----------|-------------|
 | `/forge:interview [idea \| path/to/brief.md]` | PM | Relentless one-question-at-a-time grilling until you and Claude share an understanding of the idea, then synthesis into a PM-level spec. No code, no issues. |
 | `/forge:planning [path/to/spec.md \| description]` | PM | A planner drafts an epic with user stories, a critic attacks it in a separate context, they iterate up to 3 rounds. Files the result as a GitHub epic with native sub-issues for async human review. No technical content: no files, no schemas, no architecture. |
-| `/forge:building <#issue ...> [--gate] [--max-rounds N] [--base <branch>] [--surface <name>]` | DEV | A generator and evaluator negotiate a granular contract of "done" against the live codebase, a team builds in an isolated worktree, then the evaluator black-box tests the running artifact against that contract until it passes: driving a browser for a web app, calling the public API for a library, running argv and reading exit codes for a CLI. Opens a PR. |
+| `/forge:building <#issue ...> [--no-gate] [--max-rounds N] [--base <branch>] [--surface <name>]` | DEV | A generator and evaluator negotiate a granular contract of "done" against the live codebase, a team builds in an isolated worktree, then the evaluator black-box tests the running artifact against that contract until it passes: driving a browser for a web app, calling the public API for a library, running argv and reading exit codes for a CLI. Opens a PR. |
 
 ## Pipeline
 
@@ -92,7 +92,8 @@ flowchart TD
         direction LR
         b0["0.5 · Preflight<br/>gh + evaluation surface"] --> b1["1 · Isolated worktree"]
         b1 --> b2["2 · generator ⚔ evaluator<br/>negotiate the contract<br/>max 3 exchanges"]
-        b2 --> b4["4 · sonnet builders,<br/>one per workstream"]
+        b2 --> b3{{"👤 3 · approve the contract<br/>grounding + residual risks first<br/>--no-gate skips"}}
+        b3 --> b4["4 · sonnet builders,<br/>one per workstream"]
         b4 --> b5["5 · Static checks"]
         b5 --> b6["6 · evaluator black-box tests<br/>the running artifact<br/>max 5 rounds"]
         b6 -.->|"ROUND_FAILED<br/>fresh fixer, sees only the critique"| b4
@@ -107,6 +108,8 @@ flowchart TD
 The contract negotiated in Phase 2 is the only plan `/forge:building` makes. There is no PLAN.md. Technical decisions belong to the builders, made against the code as they work, and Phase 6 judges the result against the contract rather than against the builders' account of it.
 
 Facts are the exception, because a fact is not a decision. Before it writes a single criterion, the generator declares every store, path, env var, collection, and dependency its contract will name, each marked `EXISTS` with `file:line` evidence or `NEW`. The lead reproduces each `EXISTS` with a grep, and any `NEW` persistent substrate stops the run for one human question, gate or no gate. Deferring a decision keeps options open; deferring a fact just means somebody downstream invents it, and inventing and discovering look identical from inside a contract.
+
+For the same reason, `/forge:building` pauses on the negotiated contract by default, showing you the grounding block and the evaluator's residual risks before the criteria. The contract is the last artifact you can correct cheaply: after it, every criterion, every builder and every sibling issue inherits its premises. `--no-gate` runs straight through when you already trust them.
 
 Every phase, agent, artifact, and loop is laid out in the [full pipeline reference](https://htmlpreview.github.io/?https://github.com/dasirra/cc-forge/blob/main/docs/pipeline.html), which also documents the evaluation surfaces. Source: [`docs/pipeline.html`](docs/pipeline.html).
 

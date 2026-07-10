@@ -1,6 +1,6 @@
 ---
 description: Implement signed-off issues end to end with a team of agents in an isolated worktree. Before coding, a generator and an adversarial evaluator negotiate a granular contract of what "done" means; after coding, the evaluator black-box tests the running artifact against that contract until it passes. Ships as a PR.
-argument-hint: <#issue | #issue #issue ... | "description of the work"> [--gate] [--max-rounds N] [--base <branch>]
+argument-hint: <#issue | #issue #issue ... | "description of the work"> [--no-gate] [--max-rounds N] [--base <branch>]
 ---
 
 # /forge:building
@@ -62,10 +62,11 @@ number does not resolve, stop and report it rather than guessing. If the
 request is free-form, restate it as a problem statement plus acceptance
 criteria before proceeding.
 
-Flags: `--gate` pauses for human approval of the negotiated contract before
-building (default is fully autonomous). `--max-rounds N` caps evaluation
-rounds (default 5). `--base <branch>` forces the base branch.
-`--surface <name>` forces the evaluation surface.
+Flags: the run pauses for human approval of the negotiated contract before
+building. `--no-gate` skips that pause and runs autonomously, for work whose
+premises you already trust. `--max-rounds N` caps evaluation rounds
+(default 5). `--base <branch>` forces the base branch. `--surface <name>`
+forces the evaluation surface.
 
 ## Phase 0.5: Preflight
 
@@ -201,19 +202,28 @@ reason, evaluator must accept, the issue comment gets updated with an
 "Amended" note. Never silently edit a criterion because it turned out to be
 hard.
 
-## Phase 3: Human gate on the contract (opt-in)
+## Phase 3: Human gate on the contract (default)
 
-Default: no pause. The agreed contract is already posted to the issue
-(Phase 2), so the human can inspect it asynchronously, and the run continues
-autonomously into execution. The NEW-substrate escalation in Phase 2 step 1.5
-is not part of this gate and fires regardless.
-
-If `--gate` was passed: show the user the agreed contract, in this order: the
+Default: pause. Show the user the agreed contract, in this order: the
 grounding block (NEW entries first), the evaluator's residual risks, then the
 criteria list and any disputes. Wait for approval or adjustments before
-building. In the ungated default, the issue comment posted in Phase 2 leads
-with the same grounding block and residual risks, above the criteria. A human
-skims what he is shown first; show him the premises, not the paperwork.
+building. A human skims what he is shown first; show him the premises, not the
+paperwork.
+
+The pause is the default because the contract is the last artifact a human can
+correct cheaply. After it, every criterion, every builder, and every sibling
+issue inherits its premises, and the amendment rule makes changing one an
+event. A minute here is worth a rebuild there.
+
+If `--no-gate` was passed: no pause. The agreed contract is already posted to
+the issue (Phase 2), leading with the same grounding block and residual risks
+above the criteria, so the human can inspect it asynchronously and the run
+continues into execution. Use this when you already trust the premises, not to
+save a minute.
+
+Either way, the NEW-substrate escalation in Phase 2 step 1.5 is not part of
+this gate and fires regardless. It asks whether the contract may invent a
+store; this gate asks whether the contract is right.
 
 ## Phase 4: Execution (sonnet team, straight from the contract)
 

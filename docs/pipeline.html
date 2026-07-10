@@ -258,7 +258,7 @@
       <span class="band zone hum c1">human in the loop</span>
       <span class="band zone c3">agents · async review</span>
       <span class="band zone hum c5">human</span>
-      <span class="band zone c7">agents · afk, one question if it invents</span>
+      <span class="band zone c7">agents · gated, then afk</span>
       <span class="band zone hum c9">human</span>
 
     </div>
@@ -401,9 +401,9 @@
 
     <div class="phase gate">
       <span class="dot">3</span>
-      <h3>Human gate <span class="opt">· only with --gate</span></h3>
-      <p>Default is autonomous; the contract is already on the issue for async inspection. Grounding and residual risks lead the view, above the criteria. The NEW-substrate question in phase 2 is not part of this gate and fires either way.</p>
-      <div class="chips"><span class="chip human">👤 optional approval</span></div>
+      <h3>Human gate <span class="opt">· default, --no-gate skips</span></h3>
+      <p>Default is a pause: the contract is the last artifact you can correct cheaply. Grounding and residual risks lead the view, above the criteria. <code>--no-gate</code> runs on and leaves the contract on the issue for async inspection. The NEW-substrate question in phase 2 is not part of this gate and fires either way.</p>
+      <div class="chips"><span class="chip human">👤 contract approval</span></div>
     </div>
 
     <div class="phase">
@@ -483,7 +483,7 @@
       <li><strong>surface confirmation</strong> · one question in preflight</li>
       <li><strong>new substrate</strong> · one question when the contract invents a store, gate or no gate</li>
       <li><strong>issue review</strong> · edit + arbitrate on GitHub before /forge:building</li>
-      <li><strong>--gate</strong> · optional contract approval</li>
+      <li><strong>contract approval</strong> · the default pause; <code>--no-gate</code> skips it</li>
       <li><strong>PR review &amp; merge</strong> · per phase, taste + QA</li>
     </ul>
   </div>
