@@ -1,13 +1,13 @@
 # Claude Code binding
 
-Forge's commands (`commands/interview.md`, `commands/planning.md`,
-`commands/building.md`) are written in harness-neutral prose: instead of
+Forge's skills (`skills/interview/SKILL.md`, `skills/planning/SKILL.md`,
+`skills/building/SKILL.md`) are written in harness-neutral prose: instead of
 naming a specific coding agent's tools or models, they use neutral verbs and
 tier markers that each harness binds to its own equivalents. This doc is
 the Claude Code binding: it maps every neutral phrase used in the prose to
 the concrete Claude Code tool or model tier that realizes it.
 
-| Neutral phrase (in commands/) | Claude Code binding |
+| Neutral phrase (in skills/) | Claude Code binding |
 | --- | --- |
 | judgment-tier | opus |
 | labor-tier | sonnet |
@@ -16,7 +16,7 @@ the concrete Claude Code tool or model tier that realizes it.
 | exploratory | Explore |
 | a working scratch location | the session scratchpad directory |
 
-Every left-hand phrase is the exact string as it appears in `commands/`;
+Every left-hand phrase is the exact string as it appears in the skills;
 binding is a literal substitution of that phrase by its right-hand value.
 The `exploratory` row is a single-word swap: it marks Claude Code's
 read-only **Explore** subagent, and substitution replaces only the word

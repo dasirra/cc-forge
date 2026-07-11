@@ -1,14 +1,15 @@
 ---
+name: interview
 description: Relentless one-question-at-a-time grilling interview about an idea, then synthesis into a PM-level spec document ready to pass to /forge:planning. The human-in-the-loop alignment phase; produces no code and no issues.
-argument-hint: "[idea text | path/to/brief.md | empty = interview about the current conversation]"
+disable-model-invocation: true
 ---
 
 # /forge:interview
 
-> **Harness binding.** This command is written in harness-neutral terms — role
-> tiers (e.g. `judgment-tier`, `labor-tier`) and generic verbs — instead of one
+> **Harness binding.** This command is written in harness-neutral terms: role
+> tiers (e.g. `judgment-tier`, `labor-tier`) and generic verbs, instead of one
 > agent's tool and model names. Before acting, load the binding for your
-> environment from [`docs/harness-bindings/`](../docs/harness-bindings/README.md)
+> environment from [`docs/harness-bindings/`](../../docs/harness-bindings/README.md)
 > and resolve every neutral term to the concrete tool or model it names; when
 > the prose spawns a subagent of a given tier, use the model the binding maps
 > that tier to.
@@ -19,6 +20,8 @@ understanding into a spec document ready for /forge:planning. You do NOT design
 architecture, write code, create issues, or run /forge:planning yourself.
 
 Input: $ARGUMENTS
+
+If `$ARGUMENTS` is empty or was not substituted, treat the user's request itself as the arguments.
 
 Interpret the input:
 1. **Empty** -> the idea is whatever is under discussion in this conversation.

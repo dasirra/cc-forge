@@ -1,14 +1,15 @@
 ---
+name: building
 description: Implement signed-off issues end to end with a team of agents in an isolated worktree. Before coding, a generator and an adversarial evaluator negotiate a granular contract of what "done" means; after coding, the evaluator black-box tests the running artifact against that contract until it passes. Ships as a PR.
-argument-hint: <#issue | #issue #issue ... | "description of the work"> [--no-gate] [--max-rounds N] [--base <branch>]
+disable-model-invocation: true
 ---
 
 # /forge:building
 
-> **Harness binding.** This command is written in harness-neutral terms — role
-> tiers (e.g. `judgment-tier`, `labor-tier`) and generic verbs — instead of one
+> **Harness binding.** This command is written in harness-neutral terms: role
+> tiers (e.g. `judgment-tier`, `labor-tier`) and generic verbs, instead of one
 > agent's tool and model names. Before acting, load the binding for your
-> environment from [`docs/harness-bindings/`](../docs/harness-bindings/README.md)
+> environment from [`docs/harness-bindings/`](../../docs/harness-bindings/README.md)
 > and resolve every neutral term to the concrete tool or model it names; when
 > the prose spawns a subagent of a given tier, use the model the binding maps
 > that tier to.
@@ -21,6 +22,8 @@ relay artifacts, verify, and ship.
 
 Requested work:
 $ARGUMENTS
+
+If `$ARGUMENTS` is empty or was not substituted, treat the user's request itself as the arguments.
 
 ## Roles and models (non-negotiable)
 

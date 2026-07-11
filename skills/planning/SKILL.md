@@ -1,14 +1,15 @@
 ---
+name: planning
 description: Adversarial PM-level planning. A planner drafts an epic with user stories, a critic attacks it, they iterate, then everything lands on GitHub immediately as issues for async human review. Technical contracts are deliberately excluded; those get negotiated at /forge:building time.
-argument-hint: "[empty = use this conversation] | path/to/spec.md | \"free-form feature description\""
+disable-model-invocation: true
 ---
 
 # /forge:planning
 
-> **Harness binding.** This command is written in harness-neutral terms — role
-> tiers (e.g. `judgment-tier`, `labor-tier`) and generic verbs — instead of one
+> **Harness binding.** This command is written in harness-neutral terms: role
+> tiers (e.g. `judgment-tier`, `labor-tier`) and generic verbs, instead of one
 > agent's tool and model names. Before acting, load the binding for your
-> environment from [`docs/harness-bindings/`](../docs/harness-bindings/README.md)
+> environment from [`docs/harness-bindings/`](../../docs/harness-bindings/README.md)
 > and resolve every neutral term to the concrete tool or model it names; when
 > the prose spawns a subagent of a given tier, use the model the binding maps
 > that tier to.
@@ -22,6 +23,8 @@ and file the outcome.
 
 Requested input:
 $ARGUMENTS
+
+If `$ARGUMENTS` is empty or was not substituted, treat the user's request itself as the arguments.
 
 ## Operating principles
 
