@@ -34,9 +34,9 @@ model does not weaken the design on its own.
 
 There is one consequence to respect. With the same model on both sides of every
 pair, **context separation is the only thing preventing a rubber-stamp**. The
-`exploratory`/subagent binding below is therefore load-bearing, and the
-open-model reliability compensations — scoped once issue #4's validation shows
-which are actually needed — matter here.
+`exploratory`/subagent binding below is therefore load-bearing. Before trusting
+a run, confirm the evaluator genuinely pushes back rather than passing every
+criterion on the first round.
 
 ## Required: forked-context subagents
 
