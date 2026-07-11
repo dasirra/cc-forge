@@ -14,10 +14,10 @@ compare harnesses, read this file.
 
 ## Available bindings
 
-- [`claude-code.md`](claude-code.md) — Claude Code. Judgment/labor tiers map to
+- [`claude-code.md`](claude-code.md): Claude Code. Judgment/labor tiers map to
   distinct models (opus / sonnet); binding is an exact-string substitution
   (a round-trip check verifies it reconstructs the original skill text).
-- [`pi.md`](pi.md) — Pi with open-weight models. Every tier maps to one model
+- [`pi.md`](pi.md): Pi with open-weight models. Every tier maps to one model
   (GLM-5.2); binding is semantic (the agent interprets each phrase). Requires
   forked-context subagents (`pi-subagents`); the `native` evaluation surface is
   unavailable.

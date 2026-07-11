@@ -28,7 +28,7 @@ the description into the sentence.
 
 Pi runs GLM-5.2 for every role; both `judgment-tier` and `labor-tier` map to
 it. The judgment/labor distinction stays legible in the prose but does not
-drive model selection here — there is no separate tier to select. What makes a
+drive model selection here; there is no separate tier to select. What makes a
 subagent an adversary is its separated context, not its weights, so a single
 model does not weaken the design on its own.
 
@@ -40,7 +40,7 @@ criterion on the first round.
 
 ## Required: forked-context subagents
 
-Forge's adversaries — planner vs critic, generator vs evaluator — only work
+Forge's adversaries (planner vs critic, generator vs evaluator) only work
 because each cannot see the other's reasoning. Pi core ships no subagent tool;
 the `pi-subagents` package provides one with forked contexts. **Do not run
 forge on a Pi without it.** Without forked contexts the pipeline collapses into
