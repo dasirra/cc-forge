@@ -15,6 +15,8 @@ the concrete Claude Code tool or model tier that realizes it.
 | the worktree helper | EnterWorktree |
 | exploratory | Explore |
 | a working scratch location | the session scratchpad directory |
+| a browser automation driver | a browser MCP (claude-in-chrome or Playwright) |
+| direct UI control | computer use |
 
 Every left-hand phrase is the exact string as it appears in the skills;
 binding is a literal substitution of that phrase by its right-hand value.

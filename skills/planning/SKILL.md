@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # /forge:planning
 
-> **Harness binding.** This command is written in harness-neutral terms: role
+> **Harness binding.** This skill is written in harness-neutral terms: role
 > tiers (e.g. `judgment-tier`, `labor-tier`) and generic verbs, instead of one
 > agent's tool and model names. Before acting, load the binding for your
 > environment from [`docs/harness-bindings/`](../../docs/harness-bindings/README.md)

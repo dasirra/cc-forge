@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # /forge:building
 
-> **Harness binding.** This command is written in harness-neutral terms: role
+> **Harness binding.** This skill is written in harness-neutral terms: role
 > tiers (e.g. `judgment-tier`, `labor-tier`) and generic verbs, instead of one
 > agent's tool and model names. Before acting, load the binding for your
 > environment from [`docs/harness-bindings/`](../../docs/harness-bindings/README.md)
@@ -99,7 +99,7 @@ contract negotiations and a full build, is not.
    | `library` | installing the package into a clean environment | calling the public API from throwaway scripts |
    | `cli` | building or installing the executable | running it as a subprocess: argv, stdin, stdout, stderr, exit codes |
    | `service` | booting the server | issuing real requests against its endpoints |
-   | `native` | launching the app or simulator | computer use |
+   | `native` | launching the app or simulator | direct UI control |
 
    Infer the likely surface from the repo (entry points, manifests, how the
    README says to run it) and confirm with an interactive question, your inference
@@ -108,10 +108,9 @@ contract negotiations and a full build, is not.
    user knows which one the contract is about. `--surface` skips the question.
 
 3. **Surface dependencies.** `web` is the only surface with an external
-   dependency: a browser automation MCP server (claude-in-chrome or
-   Playwright). Verify one is connected. If it is not, stop and offer three
-   choices: install one, fall back to `native` and drive the browser with
-   computer use, or abort. Never continue into Phase 1 with no way to run
+   dependency: a browser automation driver. Verify one is available. If it is
+   not, stop and offer three choices: install one, fall back to `native` (only
+   if your harness provides direct UI control), or abort. Never continue into Phase 1 with no way to run
    Phase 6.
 
 The resolved surface becomes `surface` in `harness/contract.json` and
@@ -276,8 +275,8 @@ Loop, max `--max-rounds` (default 5) rounds:
    server, install the package into a clean environment, build the
    executable, boot the service, or launch the simulator.
 2. Spawn the **evaluator** (judgment-tier) with the tools its surface needs: a browser
-   MCP for `web`, computer use for `native`, Bash for `library`, `cli`, and
-   `service`. It receives ONLY: the agreed contract, how to reach the running
+   automation driver for `web`, direct UI control for `native`, Bash for
+   `library`, `cli`, and `service`. It receives ONLY: the agreed contract, how to reach the running
    artifact, and the issue body.
 
    Its role prompt, keeping the bracketed clause that matches the surface:
