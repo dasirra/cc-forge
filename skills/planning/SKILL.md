@@ -1,6 +1,7 @@
 ---
+name: planning
 description: Adversarial PM-level planning. A planner drafts an epic with user stories, a critic attacks it, they iterate, then everything lands on GitHub immediately as issues for async human review. Technical contracts are deliberately excluded; those get negotiated at /forge:building time.
-argument-hint: "[empty = use this conversation] | path/to/spec.md | \"free-form feature description\""
+disable-model-invocation: true
 ---
 
 # /forge:planning
@@ -22,6 +23,8 @@ and file the outcome.
 
 Requested input:
 $ARGUMENTS
+
+If `$ARGUMENTS` is empty or was not substituted, treat the user's request itself as the arguments.
 
 ## Operating principles
 
