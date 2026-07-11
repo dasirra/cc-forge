@@ -15,6 +15,8 @@ agent's concrete tool or, for tiers, the open-weight model that realizes it.
 | the worktree helper | `git worktree add` |
 | exploratory | a read-only subagent (the `subagent` tool from `pi-subagents`, forked context) |
 | a working scratch location | a `harness/` directory inside the worktree, git-excluded (per the building skill's `.git/info/exclude` step) |
+| a browser automation driver | Playwright, driven via Bash |
+| direct UI control | unavailable; Pi has no computer-use surface, so the native surface is skipped |
 
 Read each neutral phrase in the prose as the Pi tool, model, or behaviour its
 right-hand value describes, and realise that behaviour: this is a semantic
@@ -48,12 +50,11 @@ self-review, the exact failure the design exists to prevent, and no amount of
 prose fixes that. Do not simulate a subagent by continuing in the same context;
 if the package is absent, stop and say so rather than faking the separation.
 
-## Evaluation surfaces (not yet neutralized)
+## Evaluation surfaces
 
-The `web` / `native` / browser-MCP lines in `skills/building/SKILL.md` were not
-neutralized (that was out of scope for the neutralization), so they
-still name tools that may not exist on Pi. Read them as follows until that
-follow-up lands:
+The building skill's surface table uses neutral terms (`a browser automation
+driver`, `direct UI control`) bound in the table above. On Pi they resolve as
+follows:
 
 - `native` (computer-use) surface: **unavailable**. Skip any step whose only
   observation path is native, tell the user, and continue.
