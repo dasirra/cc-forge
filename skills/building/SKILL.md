@@ -1,6 +1,7 @@
 ---
+name: building
 description: Implement signed-off issues end to end with a team of agents in an isolated worktree. Before coding, a generator and an adversarial evaluator negotiate a granular contract of what "done" means; after coding, the evaluator black-box tests the running artifact against that contract until it passes. Ships as a PR.
-argument-hint: <#issue | #issue #issue ... | "description of the work"> [--no-gate] [--max-rounds N] [--base <branch>]
+disable-model-invocation: true
 ---
 
 # /forge:building
@@ -21,6 +22,8 @@ relay artifacts, verify, and ship.
 
 Requested work:
 $ARGUMENTS
+
+If `$ARGUMENTS` is empty or was not substituted, treat the user's request itself as the arguments.
 
 ## Roles and models (non-negotiable)
 
