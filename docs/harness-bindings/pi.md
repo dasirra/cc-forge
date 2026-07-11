@@ -16,13 +16,16 @@ The sibling Claude Code binding is
 | an interactive question | a plain chat question to the user, options listed with the recommended one first |
 | the worktree helper | `git worktree add` |
 | exploratory | a read-only subagent (the `subagent` tool from `pi-subagents`, forked context) |
-| a working scratch location | a gitignored `harness/` directory inside the worktree |
+| a working scratch location | a `harness/` directory inside the worktree, git-excluded (per the building command's `.git/info/exclude` step) |
 
-Every left-hand phrase is the exact string as it appears in `commands/`;
-binding is a literal substitution of that phrase by its right-hand value. The
-`exploratory` row is a single-word swap: replace only the word `exploratory`
-with the read-only subagent, leaving the following generic `subagent` /
-`sub-agent` in the prose unchanged.
+Read each neutral phrase in the prose as the Pi tool, model, or behaviour its
+right-hand value describes, and realise that behaviour. Unlike the Claude Code
+binding — whose round-trip check needs an exact-string mapping — this is a
+semantic binding the Pi agent interprets, not a literal find-and-replace.
+Several right-hand values are descriptions rather than drop-in tokens (for
+example `exploratory` and `an interactive question`): when the prose says "an
+exploratory subagent", spawn a read-only forked-context subagent; do not paste
+the description into the sentence.
 
 ## Single model, both tiers
 
@@ -38,7 +41,8 @@ Note the consequence, though. With the same model on both sides of every pair,
 **context separation is the only thing preventing a rubber-stamp**. On Claude
 Code a stronger judgment model gave some slack; here it does not. The
 `exploratory`/subagent binding below is therefore load-bearing, and the
-open-model reliability compensations (see the port notes) matter more.
+open-model reliability compensations — built once issue #4's validation shows
+which are actually needed — matter more.
 
 ## Required: forked-context subagents
 
