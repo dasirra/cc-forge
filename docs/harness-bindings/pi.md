@@ -65,10 +65,3 @@ follow-up lands:
   observation path is native, tell the user, and continue.
 - `web`: drive the browser with **Playwright via Bash**, not a browser MCP.
 - `library` / `cli` / `service`: need only Bash; these port unchanged.
-
-## Not bound
-
-There is no review / `/code-review` entry — that step is absent from the
-command prose (it was removed from the pipeline upstream). If you want a final
-review on Pi, spawn a reviewer subagent over `git diff <base>...HEAD` with a
-brief to find correctness and cross-workstream defects.
