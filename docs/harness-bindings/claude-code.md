@@ -5,9 +5,10 @@ Forge's commands (`commands/interview.md`, `commands/planning.md`,
 naming a specific coding agent's tools or models, they use neutral verbs and
 tier markers that any harness can bind to its own equivalents. This doc is
 the Claude Code binding: it maps every neutral phrase used in the prose to
-the concrete Claude Code tool or model tier that realizes it. A planned
-sibling Pi binding (issue #5) will map the same neutral verbs to open-model
-equivalents, so the same commands can run unmodified on either harness.
+the concrete Claude Code tool or model tier that realizes it. The sibling Pi
+binding at [`docs/harness-bindings/pi.md`](pi.md) maps the same neutral verbs
+to open-model equivalents, so the same commands run unmodified on either
+harness.
 
 | Neutral phrase (in commands/) | Claude Code binding |
 | --- | --- |
