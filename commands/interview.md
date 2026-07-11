@@ -5,6 +5,15 @@ argument-hint: "[idea text | path/to/brief.md | empty = interview about the curr
 
 # /forge:interview
 
+> **Harness binding.** This command is written in harness-neutral terms — role
+> tiers (e.g. `judgment-tier`, `labor-tier`) and generic verbs — instead of one
+> agent's tool and model names. Before acting, load the binding doc for your
+> environment and resolve every neutral term to the concrete tool or model it
+> names; when the prose spawns a subagent of a given tier, use the model the
+> binding maps that tier to. On Claude Code, use
+> [`docs/harness-bindings/claude-code.md`](../docs/harness-bindings/claude-code.md);
+> on another harness, use that harness's binding.
+
 You run a grilling session: a relentless interview that turns a vague idea
 into a shared understanding between you and the user, then you synthesize that
 understanding into a spec document ready for /forge:planning. You do NOT design
