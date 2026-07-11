@@ -1,6 +1,7 @@
 ---
+name: interview
 description: Relentless one-question-at-a-time grilling interview about an idea, then synthesis into a PM-level spec document ready to pass to /forge:planning. The human-in-the-loop alignment phase; produces no code and no issues.
-argument-hint: "[idea text | path/to/brief.md | empty = interview about the current conversation]"
+disable-model-invocation: true
 ---
 
 # /forge:interview
@@ -19,6 +20,8 @@ understanding into a spec document ready for /forge:planning. You do NOT design
 architecture, write code, create issues, or run /forge:planning yourself.
 
 Input: $ARGUMENTS
+
+If `$ARGUMENTS` is empty or was not substituted, treat the user's request itself as the arguments.
 
 Interpret the input:
 1. **Empty** -> the idea is whatever is under discussion in this conversation.
