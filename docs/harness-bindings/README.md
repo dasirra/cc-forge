@@ -14,6 +14,7 @@ compare harnesses, read this file.
 
 ## Available bindings
 
+- [`antigravity.md`](antigravity.md): Google Antigravity. Judgment/labor tiers map to Gemini models (Pro/Flash); binding is semantic (the agent interprets each phrase). Requires subagents for context isolation, and the native evaluation surface is unavailable.
 - [`claude-code.md`](claude-code.md): Claude Code. Judgment/labor tiers map to
   distinct models (opus / sonnet); binding is an exact-string substitution
   (a round-trip check verifies it reconstructs the original skill text).
