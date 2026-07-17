@@ -224,7 +224,7 @@
 
 <div class="wrap">
 <header>
-  <span class="eyebrow">Pipeline reference · forge@cc-forge · 2026-07-10</span>
+  <span class="eyebrow">Pipeline reference · forge@cc-forge · 2026-07-17</span>
   <h1>/forge:interview + /forge:planning + /forge:building, as currently written</h1>
   <p class="sub">Every phase, agent, artifact, and loop in the three commands. Adversarial pairs never share context; they exchange files, relayed by the orchestrator. Source: <a href="https://github.com/dasirra/cc-forge">github.com/dasirra/cc-forge</a>.</p>
   <div class="legend">
@@ -332,7 +332,7 @@
     <div class="phase">
       <span class="dot">3</span>
       <h3>Plan negotiation ⚔</h3>
-      <p>Fresh contexts, artifacts only. The planner drafts goal, user stories, mermaid flows, and 3-8 sub-issues in shippable phases; the critic sees only plan.md and attacks missing scope, unverifiable criteria, wrong granularity. Every revision comes from a fresh planner, never the original.</p>
+      <p>Fresh contexts, artifacts only. The planner drafts goal, user stories, mermaid flows, and 3-8 sub-issues in shippable phases, each with acceptance criteria as Given/When/Then scenarios; the critic sees only plan.md and attacks missing scope, unreachable Givens, smuggled actions, vacuous Thens, illustrative literals, wrong granularity. Every revision comes from a fresh planner, never the original.</p>
       <div class="duel">
         <span class="actor opus">planner · opus</span>
         <span class="flow"><span class="fwd">plan.md</span><span class="bck">critique.md</span></span>
@@ -389,7 +389,7 @@
     <div class="phase">
       <span class="dot">2</span>
       <h3>Contract negotiation ⚔</h3>
-      <p>First the grounding block: every store, path, env var, collection, endpoint and dependency the contract will name, each EXISTS with file:line evidence or NEW. The lead reproduces every EXISTS with a grep and relays nothing it cannot reproduce; any NEW substrate stops for one human question, gate or no gate. Then what "done" means: 10-20 observable criteria per issue + 3-8 integration criteria, each carrying a verification method written in the surface's vocabulary. The evaluator sees only issue + proposed contract and attacks vagueness, wrong tagging, weak tests, and ungrounded nouns. Agreed criteria post per-issue to GitHub; amendments only through this channel.</p>
+      <p>First the grounding block: every store, path, env var, collection, endpoint and dependency the contract will name, each EXISTS with file:line evidence or NEW. The lead reproduces every EXISTS with a grep and relays nothing it cannot reproduce; any NEW substrate stops for one human question, gate or no gate. Then what "done" means: 10-20 observable criteria per issue + 3-8 integration criteria, each carrying a worked example and a verification method written in the surface's vocabulary. The evaluator sees only issue + proposed contract and attacks vagueness, wrong tagging, weak tests, examples that contradict their own criterion, and ungrounded nouns. Agreed criteria post per-issue to GitHub; amendments only through this channel.</p>
       <div class="duel">
         <span class="actor opus">generator · opus</span>
         <span class="flow"><span class="fwd">contract.json</span><span class="bck">objections</span></span>
@@ -402,14 +402,14 @@
     <div class="phase gate">
       <span class="dot">3</span>
       <h3>Human gate <span class="opt">· default, --no-gate skips</span></h3>
-      <p>Default is a pause: the contract is the last artifact you can correct cheaply. Grounding and residual risks lead the view, above the criteria. <code>--no-gate</code> runs on and leaves the contract on the issue for async inspection. The NEW-substrate question in phase 2 is not part of this gate and fires either way.</p>
+      <p>Default is a pause: the contract is the last artifact you can correct cheaply. A fixed template shows grounding and residual risks above the criteria, each with its worked example, ending in an approve / request-changes / abort prompt so the pause holds on every harness. <code>--no-gate</code> runs on and leaves the contract on the issue for async inspection. The NEW-substrate question in phase 2 is not part of this gate and fires either way.</p>
       <div class="chips"><span class="chip human">👤 contract approval</span></div>
     </div>
 
     <div class="phase">
       <span class="dot">4</span>
       <h3>Execution</h3>
-      <p>No technical plan, no PLAN.md: the contract is the plan. The lead splits criteria into workstreams with file territories inline; one sonnet teammate per workstream makes its own technical decisions against live code. Grounding is the exception: which existing system a criterion reads is a verified fact, not a builder's to re-decide.</p>
+      <p>No technical plan, no PLAN.md: the contract is the plan. The lead splits criteria into workstreams with file territories inline; one sonnet teammate per workstream makes its own technical decisions against live code, self-checking each criterion's example against its own build before reporting done. Grounding is the exception: which existing system a criterion reads is a verified fact, not a builder's to re-decide.</p>
       <div class="chips"><span class="chip sonnet">builders · sonnet × N</span><span class="chip art">progress.json</span></div>
     </div>
 
