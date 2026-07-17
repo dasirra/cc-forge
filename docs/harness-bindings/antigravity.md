@@ -1,6 +1,6 @@
 # Antigravity binding
 
-Forge's skills (`skills/interview/SKILL.md`, `skills/planning/SKILL.md`, `skills/building/SKILL.md`) are written in harness-neutral prose: instead of naming a specific coding agent's tools or models, they use neutral verbs and tier markers that each harness binds to its own equivalents. This doc is the Antigravity binding: it maps every neutral phrase used in the prose to the Antigravity coding harness's concrete tools, subagents, and Gemini model tiers.
+DevForge's skills (`skills/interview/SKILL.md`, `skills/planning/SKILL.md`, `skills/building/SKILL.md`) are written in harness-neutral prose: instead of naming a specific coding agent's tools or models, they use neutral verbs and tier markers that each harness binds to its own equivalents. This doc is the Antigravity binding: it maps every neutral phrase used in the prose to the Antigravity coding harness's concrete tools, subagents, and Gemini model tiers.
 
 | Neutral phrase (in skills/) | Antigravity binding |
 | --- | --- |
@@ -17,7 +17,7 @@ Read each neutral phrase in the prose as the Antigravity tool, model, or behavio
 
 ## Model selection per role
 
-Antigravity supports choosing the active Gemini model. To run Forge optimally:
+Antigravity supports choosing the active Gemini model. To run DevForge optimally:
 - The **judgment-tier** tasks (proposing contracts, plan critiques, and architectural decisions) should be routed to a high-reasoning model like Gemini 3.1 Pro.
 - The **labor-tier** tasks (writing code, executing fixes, and routine edits) should be routed to a fast, cost-efficient model like Gemini 3.5 Flash.
 
@@ -25,7 +25,7 @@ If running on a single model setup, both tiers map to the same model. The advers
 
 ## Context separation via subagents
 
-Forge relies on strict context isolation (adversarial planning and contract evaluation). Antigravity implements subagent spawning natively:
+DevForge relies on strict context isolation (adversarial planning and contract evaluation). Antigravity implements subagent spawning natively:
 - **Exploratory tasks:** Use the built-in read-only `research` subagent.
 - **Planner, Critic, and Builder tasks:** Use `default_api:define_subagent` to configure a dedicated subagent type with the appropriate prompt and write/tool permissions, and invoke it via `default_api:invoke_subagent`.
 

@@ -1,6 +1,6 @@
 # Harness bindings
 
-Forge's skills (`skills/*/SKILL.md`) are written in harness-neutral prose: role
+DevForge's skills (`skills/*/SKILL.md`) are written in harness-neutral prose: role
 tiers (`judgment-tier`, `labor-tier`) and generic verbs, instead of any one
 agent's tool and model names. Each supported harness has a binding doc in this
 directory that maps those neutral terms to its concrete tools and models. A
@@ -31,7 +31,7 @@ is that its context is separated from its counterpart's, not its weights. So a
 harness that runs one model for every role loses the cost split but not the
 method. The consequence to respect: with one model on both sides, context
 separation is the only thing preventing a rubber-stamp, so a harness without
-forked-context subagents cannot run forge honestly.
+forked-context subagents cannot run devforge honestly.
 
 ## Adding a harness
 

@@ -1,6 +1,6 @@
 # Claude Code binding
 
-Forge's skills (`skills/interview/SKILL.md`, `skills/planning/SKILL.md`,
+DevForge's skills (`skills/interview/SKILL.md`, `skills/planning/SKILL.md`,
 `skills/building/SKILL.md`) are written in harness-neutral prose: instead of
 naming a specific coding agent's tools or models, they use neutral verbs and
 tier markers that each harness binds to its own equivalents. This doc is

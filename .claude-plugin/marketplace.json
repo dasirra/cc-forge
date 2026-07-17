@@ -8,7 +8,7 @@
   },
   "plugins": [
     {
-      "name": "forge",
+      "name": "devforge",
       "description": "Interview an idea into a spec, plan it adversarially into GitHub issues, then build it against a negotiated contract and ship a PR.",
       "source": "./",
       "keywords": [

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Forge · pipeline reference</title>
+<title>DevForge · pipeline reference</title>
 <style>
   :root {
     --ground: #F4F6F5;
@@ -224,8 +224,8 @@
 
 <div class="wrap">
 <header>
-  <span class="eyebrow">Pipeline reference · forge@devforge · 2026-07-17</span>
-  <h1>/forge:interview + /forge:planning + /forge:building, as currently written</h1>
+  <span class="eyebrow">Pipeline reference · devforge@devforge · 2026-07-17</span>
+  <h1>/devforge:interview + /devforge:planning + /devforge:building, as currently written</h1>
   <p class="sub">Every phase, agent, artifact, and loop in the three commands. Adversarial pairs never share context; they exchange files, relayed by the orchestrator. Source: <a href="https://github.com/dasirra/devforge">github.com/dasirra/devforge</a>.</p>
   <div class="legend">
     <span class="chip opus">opus agent</span>
@@ -245,13 +245,13 @@
       <span class="band alt a-gate">seam</span>
       <span class="band alt a-dev">DEV altitude · how</span>
 
-      <div class="stop s-human c1"><span class="k">/forge:interview</span><span class="d">relentless interview → docs/specs/&lt;slug&gt;.md</span></div>
+      <div class="stop s-human c1"><span class="k">/devforge:interview</span><span class="d">relentless interview → docs/specs/&lt;slug&gt;.md</span></div>
       <div class="arrow c2">→</div>
-      <div class="stop s-plan c3"><span class="k">/forge:planning</span><span class="d">adversarial PM plan → GitHub issues</span></div>
+      <div class="stop s-plan c3"><span class="k">/devforge:planning</span><span class="d">adversarial PM plan → GitHub issues</span></div>
       <div class="arrow c4">→</div>
       <div class="stop s-human c5"><span class="k">👤 review</span><span class="d">edit + arbitrate issues on GitHub</span></div>
       <div class="arrow c6">→</div>
-      <div class="stop s-build c7"><span class="k">/forge:building</span><span class="d">one phase per run → PR</span></div>
+      <div class="stop s-build c7"><span class="k">/devforge:building</span><span class="d">one phase per run → PR</span></div>
       <div class="arrow c8">→</div>
       <div class="stop s-human c9"><span class="k">👤 review</span><span class="d">merge PR, repeat per phase</span></div>
 
@@ -273,9 +273,9 @@
   <span>User stories and observable behavior. Never a file, a schema, a function, a library, a table, or an endpoint. A reviewer who reads only the issues understands the whole proposed change.</span>
 </div>
 <!-- ================= INTERVIEW ================= -->
-<section class="cmd interview" aria-label="/forge:interview phases">
+<section class="cmd interview" aria-label="/devforge:interview phases">
   <div class="head">
-    <h2><span class="stepnum">1</span>/forge:interview</h2>
+    <h2><span class="stepnum">1</span>/devforge:interview</h2>
     <p>The human-in-the-loop alignment phase. One question at a time, recommendation attached; output is a spec at PM altitude.</p>
   </div>
   <div class="phases">
@@ -296,16 +296,16 @@
       <span class="dot">2</span>
       <h3>Synthesize</h3>
       <p>No further interviewing. Problem, solution from the user's perspective, extensive user stories, key decisions with why, out of scope, open questions. Self-review: placeholders, contradictions, ambiguity, scope. Saved to <code>docs/specs/</code>; prints the next step, never runs it.</p>
-      <div class="chips"><span class="chip art">YYYY-MM-DD-&lt;slug&gt;.md</span><span class="chip art">→ /forge:planning &lt;path&gt;</span></div>
+      <div class="chips"><span class="chip art">YYYY-MM-DD-&lt;slug&gt;.md</span><span class="chip art">→ /devforge:planning &lt;path&gt;</span></div>
     </div>
 
   </div>
 </section>
 
 <!-- ================= PLANNING ================= -->
-<section class="cmd planning" aria-label="/forge:planning phases">
+<section class="cmd planning" aria-label="/devforge:planning phases">
   <div class="head">
-    <h2><span class="stepnum">2</span>/forge:planning</h2>
+    <h2><span class="stepnum">2</span>/devforge:planning</h2>
       <p>PM altitude only. User stories and observable behavior; never schemas or architecture. Grounding is the one exemption: facts about what already exists, with their references.</p>
   </div>
   <div class="phases">
@@ -352,7 +352,7 @@
       <span class="dot">5</span>
       <h3>Report → 👤</h3>
       <p>Child table, critique trail, contested items, and the runbook with the phase order and critical path. Review and edit the issues on GitHub, arbitrate contested items; prints the next step, never runs it.</p>
-      <div class="chips"><span class="chip human">👤 async review on GitHub</span><span class="chip art">→ /forge:building #a #b · one phase per run</span></div>
+      <div class="chips"><span class="chip human">👤 async review on GitHub</span><span class="chip art">→ /devforge:building #a #b · one phase per run</span></div>
     </div>
 
   </div>
@@ -366,9 +366,9 @@
   <span>Technical specificity is required, not tolerated: a criterion an evaluator cannot execute is not a criterion. The contract is negotiated against the codebase as it exists now, so it cannot go stale between planning and building.</span>
 </div>
 <!-- ================= BUILDING ================= -->
-<section class="cmd building" aria-label="/forge:building phases">
+<section class="cmd building" aria-label="/devforge:building phases">
   <div class="head">
-    <h2><span class="stepnum">3</span>/forge:building</h2>
+    <h2><span class="stepnum">3</span>/devforge:building</h2>
     <p>One phase of issues per run: one worktree, one contract, one PR. No upfront technical plan; the contract is the plan. Evaluator never sees generator transcripts.</p>
   </div>
   <div class="phases">
@@ -465,18 +465,18 @@
   <div class="note adv-n">
     <h4>⚔ Adversarial pairs</h4>
     <ul>
-      <li><strong>planner vs critic</strong> · /forge:planning P3, PM plan quality</li>
-      <li><strong>generator vs evaluator</strong> · /forge:building P2, what "done" means</li>
-      <li><strong>evaluator vs fixer</strong> · /forge:building P6, running artifact vs contract</li>
+      <li><strong>planner vs critic</strong> · /devforge:planning P3, PM plan quality</li>
+      <li><strong>generator vs evaluator</strong> · /devforge:building P2, what "done" means</li>
+      <li><strong>evaluator vs fixer</strong> · /devforge:building P6, running artifact vs contract</li>
     </ul>
   </div>
   <div class="note hum-n">
     <h4>👤 Human touchpoints</h4>
     <ul>
-      <li><strong>/forge:interview</strong> · the alignment that can't be delegated</li>
+      <li><strong>/devforge:interview</strong> · the alignment that can't be delegated</li>
       <li><strong>surface confirmation</strong> · one question in preflight</li>
       <li><strong>new substrate</strong> · one question when the contract invents a store, gate or no gate</li>
-      <li><strong>issue review</strong> · edit + arbitrate on GitHub before /forge:building</li>
+      <li><strong>issue review</strong> · edit + arbitrate on GitHub before /devforge:building</li>
       <li><strong>contract approval</strong> · the default pause; <code>--no-gate</code> skips it</li>
       <li><strong>PR review &amp; merge</strong> · per phase, taste + QA</li>
     </ul>

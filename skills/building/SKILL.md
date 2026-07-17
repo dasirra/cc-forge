@@ -4,7 +4,7 @@ description: Implement signed-off issues end to end with a team of agents in an 
 disable-model-invocation: true
 ---
 
-# /forge:building
+# /devforge:building
 
 > **Harness binding.** This skill is written in harness-neutral terms: role
 > tiers (e.g. `judgment-tier`, `labor-tier`) and generic verbs, instead of one

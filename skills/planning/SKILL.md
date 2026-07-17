@@ -1,10 +1,10 @@
 ---
 name: planning
-description: Adversarial PM-level planning. A planner drafts an epic with user stories, a critic attacks it, they iterate, then everything lands on GitHub immediately as issues for async human review. Technical contracts are deliberately excluded; those get negotiated at /forge:building time.
+description: Adversarial PM-level planning. A planner drafts an epic with user stories, a critic attacks it, they iterate, then everything lands on GitHub immediately as issues for async human review. Technical contracts are deliberately excluded; those get negotiated at /devforge:building time.
 disable-model-invocation: true
 ---
 
-# /forge:planning
+# /devforge:planning
 
 > **Harness binding.** This skill is written in harness-neutral terms: role
 > tiers (e.g. `judgment-tier`, `labor-tier`) and generic verbs, instead of one
@@ -17,7 +17,7 @@ disable-model-invocation: true
 You orchestrate an adversarial planning session and file the result as a GitHub
 Epic with PM-level sub-issues, created for asynchronous human
 review. You do NOT write code, you do NOT plan technical implementation, and
-you do NOT run /forge:building. Two subagents with separate context windows do the
+you do NOT run /devforge:building. Two subagents with separate context windows do the
 thinking: a PLANNER drafts, a CRITIC attacks. You relay artifacts between them
 and file the outcome.
 
@@ -32,7 +32,7 @@ If `$ARGUMENTS` is empty or was not substituted, treat the user's request itself
   acceptance criteria, proposed behavior, scope boundaries, dependencies, and a
   Grounding block. NEVER schemas, libraries, or architecture, and no file paths
   or function names outside Grounding. Granular testable contracts are negotiated
-  adversarially at /forge:building time, against the codebase as it exists then.
+  adversarially at /devforge:building time, against the codebase as it exists then.
   Freezing them now would let them go stale. Grounding is different: it records
   what already exists, and a fact does not go stale, it becomes false and fails
   its check loudly.
@@ -251,7 +251,7 @@ flowchart LR
 ## Planning notes
 Adversarially reviewed: <n> critique rounds, <n> findings addressed.
 Contested items pending human arbitration: <links to affected issues, or "none">.
-Technical contracts: negotiated at /forge:building time, per issue.
+Technical contracts: negotiated at /devforge:building time, per issue.
 
 ## References
 - <spec path, conversation summary, or source documents this plan came from>
@@ -303,7 +303,7 @@ nothing that outlives its own PR.>
 "CRITIC: <objection> / PLANNER: <rejection reasoning>". Omit if none.>
 
 ---
-*Granular contract to be negotiated by generator/evaluator at /forge:building time
+*Granular contract to be negotiated by generator/evaluator at /devforge:building time
 and posted back to this issue as a comment.*
 ````
 
@@ -321,11 +321,11 @@ Print for the user:
 Review the issues on GitHub, arbitrate contested items, and edit freely
 before implementing.
 
-Then implement one phase per /forge:building run, review/merge between phases:
+Then implement one phase per /devforge:building run, review/merge between phases:
 
-  Phase 1:  /forge:building #<a> #<b>
+  Phase 1:  /devforge:building #<a> #<b>
             (review the PR, run checks, merge)
-  Phase 2:  /forge:building #<c> #<d>
+  Phase 2:  /devforge:building #<c> #<d>
   ...
 
 Critical path: #<...> -> #<...> -> #<...>
@@ -343,7 +343,7 @@ Startable first (no deps): #<...>
   shapes. If a diagram names a file, table, or endpoint, redraw it.
 - Do not resolve planner/critic disagreements yourself; embed them and let
   the human arbitrate on GitHub.
-- Do not run /forge:building. Your output is the issues plus the runbook.
+- Do not run /devforge:building. Your output is the issues plus the runbook.
 - Mirror the repo's existing conventions; do not invent labels or prefixes
   beyond `epic`.
 - Convert any relative dates in text to absolute dates.

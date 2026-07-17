@@ -2,13 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] - 2026-07-17
+
+### Changed
+- **Breaking:** renamed the plugin/extension from `forge` to `devforge`. The skill invocations are now `/devforge:interview`, `/devforge:planning`, and `/devforge:building` (previously `/forge:...`). Install with `/plugin marketplace add dasirra/devforge` then `/plugin install devforge@devforge`. Renames the package and Claude Code plugin identifier to `devforge` and the brand to DevForge; completes the earlier `cc-forge` -> `devforge` repo rename.
+
 ## [2.2.0] - 2026-07-17
 
 ### Added
-- Every `/forge:building` contract criterion now carries an `example` field: a concrete worked case (e.g. `parse('') -> raises ValueError('empty input')`), required by the generator, rejected if missing by the lead's mechanical check, and attacked by the evaluator if it contradicts its criterion.
+- Every `/devforge:building` contract criterion now carries an `example` field: a concrete worked case (e.g. `parse('') -> raises ValueError('empty input')`), required by the generator, rejected if missing by the lead's mechanical check, and attacked by the evaluator if it contradicts its criterion.
 - The Phase 3 contract gate now renders a fixed template (grounding, residual risks, criteria grouped by issue with their example and verification method) and ends in a real interactive-question hard stop, so the gate reliably pauses on every harness instead of depending on prose alone.
 - Labor-tier builders now self-check every criterion in their brief against their own build, using its example and verification method, before reporting done - cutting wasted Phase 6 evaluation rounds without weakening the evaluator's independence.
-- `/forge:planning`'s child issues now render acceptance criteria as Given/When/Then scenarios instead of a flat prose bullet list, with two new planner rules (a reachability test for `Given` clauses, a ban on illustrative literal data) and four new critic attack vectors (Unreachable Given, Smuggled action, Vacuous Then, Illustrative literal) enforcing them adversarially.
+- `/devforge:planning`'s child issues now render acceptance criteria as Given/When/Then scenarios instead of a flat prose bullet list, with two new planner rules (a reachability test for `Given` clauses, a ban on illustrative literal data) and four new critic attack vectors (Unreachable Given, Smuggled action, Vacuous Then, Illustrative literal) enforcing them adversarially.
 
 ## [2.1.1] - 2026-07-17
 

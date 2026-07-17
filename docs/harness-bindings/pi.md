@@ -1,6 +1,6 @@
 # Pi binding
 
-Forge's skills (`skills/interview/SKILL.md`, `skills/planning/SKILL.md`,
+DevForge's skills (`skills/interview/SKILL.md`, `skills/planning/SKILL.md`,
 `skills/building/SKILL.md`) are written in harness-neutral prose: instead of naming
 a specific coding agent's tools or models, they use neutral verbs and tier
 markers that each harness binds to its own equivalents. This doc is the Pi
@@ -42,10 +42,10 @@ criterion on the first round.
 
 ## Required: forked-context subagents
 
-Forge's adversaries (planner vs critic, generator vs evaluator) only work
+DevForge's adversaries (planner vs critic, generator vs evaluator) only work
 because each cannot see the other's reasoning. Pi core ships no subagent tool;
 the `pi-subagents` package provides one with forked contexts. **Do not run
-forge on a Pi without it.** Without forked contexts the pipeline collapses into
+devforge on a Pi without it.** Without forked contexts the pipeline collapses into
 self-review, the exact failure the design exists to prevent, and no amount of
 prose fixes that. Do not simulate a subagent by continuing in the same context;
 if the package is absent, stop and say so rather than faking the separation.

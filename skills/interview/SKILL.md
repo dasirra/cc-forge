@@ -1,10 +1,10 @@
 ---
 name: interview
-description: Relentless one-question-at-a-time grilling interview about an idea, then synthesis into a PM-level spec document ready to pass to /forge:planning. The human-in-the-loop alignment phase; produces no code and no issues.
+description: Relentless one-question-at-a-time grilling interview about an idea, then synthesis into a PM-level spec document ready to pass to /devforge:planning. The human-in-the-loop alignment phase; produces no code and no issues.
 disable-model-invocation: true
 ---
 
-# /forge:interview
+# /devforge:interview
 
 > **Harness binding.** This skill is written in harness-neutral terms: role
 > tiers (e.g. `judgment-tier`, `labor-tier`) and generic verbs, instead of one
@@ -16,8 +16,8 @@ disable-model-invocation: true
 
 You run a grilling session: a relentless interview that turns a vague idea
 into a shared understanding between you and the user, then you synthesize that
-understanding into a spec document ready for /forge:planning. You do NOT design
-architecture, write code, create issues, or run /forge:planning yourself.
+understanding into a spec document ready for /devforge:planning. You do NOT design
+architecture, write code, create issues, or run /devforge:planning yourself.
 
 Input: $ARGUMENTS
 
@@ -54,8 +54,8 @@ Interview rules:
   yourself and move on instead of asking.
 - **Stay at product altitude**: users and actors, behavior, empty/error/edge
   states, scope boundaries, success criteria, priorities, rollout. Do NOT ask
-  the user to *decide* schemas, libraries, or architecture; /forge:planning bans
-  those decisions and /forge:building negotiates them against the codebase later.
+  the user to *decide* schemas, libraries, or architecture; /devforge:planning bans
+  those decisions and /devforge:building negotiates them against the codebase later.
   Do ask, or better, go and read, where an existing system the feature will
   consume already lives: that is a fact, not a decision, and it belongs in
   Grounding. If a technical unknown genuinely blocks a product decision, record
@@ -106,11 +106,11 @@ decides nothing>
 
 ## Out of scope
 <explicit rejections and deferrals, each with its one-line reason; this is
-what gives /forge:planning a definition of done>
+what gives /devforge:planning a definition of done>
 
 ## Open questions
 <unresolved product questions and deferred technical unknowns, for the
-/forge:planning critic and the /forge:building negotiation to pick up>
+/devforge:planning critic and the /devforge:building negotiation to pick up>
 ````
 
 No technical decisions anywhere: no schemas, no architecture, no chosen
@@ -124,7 +124,7 @@ Self-review before saving, fix inline, no re-review:
 1. Placeholders or vague requirements ("TBD", "works well")? Fix them.
 2. Contradictions between sections? Resolve them.
 3. Could any statement be read two ways? Pick one and make it explicit.
-4. Scope: is this one /forge:planning-sized feature? If not, say so to the user.
+4. Scope: is this one /devforge:planning-sized feature? If not, say so to the user.
 
 ## Phase 3: Save and hand off
 
@@ -136,12 +136,12 @@ Self-review before saving, fix inline, no re-review:
 ```
 Spec written to <path>. Review it, then run:
 
-  /forge:planning <path>
+  /devforge:planning <path>
 ```
 
 ## Guardrails
 
-- No code, no scaffolding, no GitHub issues, and never run /forge:planning
+- No code, no scaffolding, no GitHub issues, and never run /devforge:planning
   yourself; your output is the spec file plus the handoff line.
 - Never skip Phase 1 because the idea "seems clear". The interview is where
   misalignment dies.
