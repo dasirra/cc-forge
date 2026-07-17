@@ -149,8 +149,18 @@ original feature statement, with this role:
 > - Missing scope: user needs or edge cases the stories silently drop.
 > - Unverifiable acceptance criteria: anything a reviewer could not check by
 >   using the product ("works well", "is intuitive").
+> - Unreachable Given: a precondition a user could not establish or observe
+>   through the product itself, including one that does not sound technical.
+> - Smuggled action: an action disguised as a precondition (for example,
+>   "Given the user has submitted the form"), or a When that bundles more
+>   than one user action.
+> - Vacuous Then: an outcome that merely restates the trigger succeeding, or
+>   one not observable from the user's own vantage point.
+> - Illustrative literal: concrete data whose value is not itself the
+>   requirement being specified.
 > - Diagram/story mismatch: flows that skip error paths, states with no way
->   out, diagrams that contradict the acceptance criteria.
+>   out, diagrams that contradict the acceptance criteria, or a Given
+>   describing a state the Proposed behavior or a diagram says cannot occur.
 > - Phase ordering: phases that are not shippable alone, dependencies that are
 >   wrong or missing, hidden coupling between issues.
 > - Scope creep: stories that do not serve the stated goal, gold-plating.
