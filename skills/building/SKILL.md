@@ -238,12 +238,12 @@ Residual risks (from evaluator)
   - ...
 
 Criteria, grouped by issue
-  #<issue> — <title>
+  #<issue>: <title>
     [<id>] <criterion>
            example: <example>
            verify: <verify_how>
     ...
-  Disputes (if any): <criterion id> — GENERATOR: <reasoning> / EVALUATOR: <objection>
+  Disputes (if any): <criterion id>: GENERATOR: <reasoning> / EVALUATOR: <objection>
 ```
 
 Grounding leads (NEW entries first) because it is the premise everything else
