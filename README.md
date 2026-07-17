@@ -1,6 +1,7 @@
 <img src="assets/banner.png" alt="Forge: an opinionated idea-to-PR workflow for coding agents, built for Claude Code and also running on Pi and Google Antigravity. /forge:interview turns a vague idea into a spec, /forge:planning turns the spec into GitHub issues, /forge:building turns the issues into a contract-tested pull request, with a human gate between each. No agent grades its own work: planner vs critic, generator vs evaluator, evaluator vs fixer.">
 
-[![Built for Claude Code](https://img.shields.io/badge/built%20for-Claude%20Code-B0680F?style=flat-square)](https://claude.com/claude-code)
+[![Reference: Claude Code](https://img.shields.io/badge/reference-Claude%20Code-B0680F?style=flat-square)](https://claude.com/claude-code)
+[![Also runs on: Pi · Antigravity](https://img.shields.io/badge/also%20runs%20on-Pi%20%C2%B7%20Antigravity-3D5A9E?style=flat-square)](docs/harness-bindings/README.md)
 [![License: MIT](https://img.shields.io/github/license/dasirra/cc-forge?style=flat-square&color=0E7C6B)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/dasirra/cc-forge?style=flat-square&color=B0680F)](https://github.com/dasirra/cc-forge/stargazers)
 [![Last commit](https://img.shields.io/github/last-commit/dasirra/cc-forge?style=flat-square&color=3D5A9E)](https://github.com/dasirra/cc-forge/commits/main)
