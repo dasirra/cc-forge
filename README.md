@@ -1,11 +1,11 @@
-<img src="assets/banner.png" alt="Forge: an opinionated idea-to-PR workflow for Claude Code. /forge:interview turns a vague idea into a spec, /forge:planning turns the spec into GitHub issues, /forge:building turns the issues into a contract-tested pull request, with a human gate between each. No agent grades its own work: planner vs critic, generator vs evaluator, evaluator vs fixer.">
+<img src="assets/banner.png" alt="Forge: an opinionated idea-to-PR workflow for coding agents, built for Claude Code and also running on Pi and Google Antigravity. /forge:interview turns a vague idea into a spec, /forge:planning turns the spec into GitHub issues, /forge:building turns the issues into a contract-tested pull request, with a human gate between each. No agent grades its own work: planner vs critic, generator vs evaluator, evaluator vs fixer.">
 
 [![Built for Claude Code](https://img.shields.io/badge/built%20for-Claude%20Code-B0680F?style=flat-square)](https://claude.com/claude-code)
 [![License: MIT](https://img.shields.io/github/license/dasirra/cc-forge?style=flat-square&color=0E7C6B)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/dasirra/cc-forge?style=flat-square&color=B0680F)](https://github.com/dasirra/cc-forge/stargazers)
 [![Last commit](https://img.shields.io/github/last-commit/dasirra/cc-forge?style=flat-square&color=3D5A9E)](https://github.com/dasirra/cc-forge/commits/main)
 
-An opinionated idea-to-PR workflow for [Claude Code](https://claude.com/claude-code), with a human gate at each seam. Three skills, run in order.
+An opinionated idea-to-PR workflow for coding agents, with a human gate at each seam. Three skills, run in order. Reference implementation is [Claude Code](https://claude.com/claude-code); Pi and Google Antigravity run the same skills through per-harness bindings, see [Portability](#portability).
 
 ```
 PM   /forge:interview   vague idea         ->  docs/specs/YYYY-MM-DD-<slug>.md
@@ -48,13 +48,15 @@ The other two need:
 - **`gh` CLI, authenticated**, in a repo with a GitHub remote. `/forge:planning` files issues; `/forge:building` reads them and opens the PR.
 - **A way to run your project and observe it from outside.** `/forge:building` resolves an *evaluation surface* up front (`web`, `library`, `cli`, `service`, or `native`) and black-box tests the contract against it. Only `web` needs an extra dependency: a browser automation MCP server, Claude in Chrome or Playwright.
 
+These are the Claude Code requirements. Other harnesses swap the subagent mechanism and, for `web`, the browser driver accordingly; see [`docs/harness-bindings/`](docs/harness-bindings/README.md) for what each one needs and which evaluation surfaces it supports.
+
 ## Skills
 
 | Skill | Altitude | Description |
 |---------|----------|-------------|
 | `/forge:interview [idea \| path/to/brief.md]` | PM | Relentless one-question-at-a-time grilling until you and Claude share an understanding of the idea, then synthesis into a PM-level spec. No code, no issues. |
-| `/forge:planning [path/to/spec.md \| description]` | PM | A planner drafts an epic with user stories, a critic attacks it in a separate context, they iterate up to 3 rounds. Files the result as a GitHub epic with native sub-issues for async human review. No technical content: no files, no schemas, no architecture. |
-| `/forge:building <#issue ...> [--no-gate] [--max-rounds N] [--base <branch>] [--surface <name>]` | DEV | A generator and evaluator negotiate a granular contract of "done" against the live codebase, a team builds in an isolated worktree, then the evaluator black-box tests the running artifact against that contract until it passes: driving a browser for a web app, calling the public API for a library, running argv and reading exit codes for a CLI. Opens a PR. |
+| `/forge:planning [path/to/spec.md \| description]` | PM | A planner drafts an epic with user stories and acceptance criteria as Given/When/Then scenarios, a critic attacks it in a separate context, they iterate up to 3 rounds. Files the result as a GitHub epic with native sub-issues for async human review. No technical content: no files, no schemas, no architecture. |
+| `/forge:building <#issue ...> [--no-gate] [--max-rounds N] [--base <branch>] [--surface <name>]` | DEV | A generator and evaluator negotiate a granular contract of "done" against the live codebase, each criterion carrying a worked example, a team builds in an isolated worktree, then the evaluator black-box tests the running artifact against that contract until it passes: driving a browser for a web app, calling the public API for a library, running argv and reading exit codes for a CLI. Opens a PR. |
 
 ## Pipeline
 
@@ -108,7 +110,7 @@ The contract negotiated in Phase 2 is the only plan `/forge:building` makes. The
 
 Facts are the exception, because a fact is not a decision. Before it writes a single criterion, the generator declares every store, path, env var, collection, and dependency its contract will name, each marked `EXISTS` with `file:line` evidence or `NEW`. The lead reproduces each `EXISTS` with a grep, and any `NEW` persistent substrate stops the run for one human question, gate or no gate. Deferring a decision keeps options open; deferring a fact just means somebody downstream invents it, and inventing and discovering look identical from inside a contract.
 
-For the same reason, `/forge:building` pauses on the negotiated contract by default, showing you the grounding block and the evaluator's residual risks before the criteria. The contract is the last artifact you can correct cheaply: after it, every criterion, every builder and every sibling issue inherits its premises. `--no-gate` runs straight through when you already trust them.
+For the same reason, `/forge:building` pauses on the negotiated contract by default: a fixed template showing the grounding block and the evaluator's residual risks before the criteria, each criterion with its own worked example, ending in a real approve / request-changes / abort prompt so the pause holds on every harness rather than depending on a model choosing to stop. The contract is the last artifact you can correct cheaply: after it, every criterion, every builder and every sibling issue inherits its premises. `--no-gate` runs straight through when you already trust them.
 
 Every phase, agent, artifact, and loop is laid out in the [full pipeline reference](https://htmlpreview.github.io/?https://github.com/dasirra/cc-forge/blob/main/docs/pipeline.html), which also documents the evaluation surfaces. Source: [`docs/pipeline.html`](docs/pipeline.html).
 
@@ -124,7 +126,13 @@ Three ideas run through all three skills.
 
 ## Portability
 
-Forge is Claude Code specific, and not incidentally so. It depends on subagents with genuinely separate context windows, per-role model selection, isolated git worktrees, and, for web projects, a browser-driving MCP server. The methodology travels to any agent; this implementation does not.
+Forge's skills are written in harness-neutral prose: role tiers (`judgment-tier`, `labor-tier`) and generic verbs instead of one agent's tool and model names. Each supported harness has a binding doc that maps those neutral terms to its concrete tools and models:
+
+- **Claude Code**: opus for judgment-tier, sonnet for labor-tier; binding is an exact-string substitution.
+- **Pi**, for open-weight models (for example served through Ollama): a single model for every tier; requires the `pi-subagents` package for forked-context subagents, without which the adversarial pairs collapse into self-review.
+- **Google Antigravity**: Gemini 3.1 Pro for judgment-tier, Gemini 3.5 Flash for labor-tier; semantic binding through native subagents.
+
+What makes a planner/critic or generator/evaluator pair adversarial is that their contexts are separated, not that they run different models. A harness running one model on both sides loses the cost split but keeps the method, as long as it has genuinely forked-context subagents. See [`docs/harness-bindings/`](docs/harness-bindings/README.md) for the full mapping and each harness's caveats: which evaluation surfaces it supports, whether it selects models per role, and what it needs for context isolation.
 
 ## Credits
 
