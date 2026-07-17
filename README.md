@@ -1,4 +1,4 @@
-<img src="assets/banner.png" alt="DevForge: an opinionated idea-to-PR workflow for coding agents, built for Claude Code and also running on Pi and Google Antigravity. /devforge:interview turns a vague idea into a spec, /devforge:planning turns the spec into GitHub issues, /devforge:building turns the issues into a contract-tested pull request, with a human gate between each. No agent grades its own work: planner vs critic, generator vs evaluator, evaluator vs fixer.">
+<img src="assets/banner.png" alt="DevForge: an opinionated, adversarial idea-to-PR workflow for coding agents, built for Claude Code and also running on Pi and Google Antigravity. /devforge:interview turns a vague idea into a spec, /devforge:planning turns the spec into GitHub issues, /devforge:building turns the issues into a contract-tested pull request, with a human gate between each. No agent grades its own work: planner vs critic, generator vs evaluator, evaluator vs fixer.">
 
 [![Reference: Claude Code](https://img.shields.io/badge/reference-Claude%20Code-B0680F?style=flat-square)](https://claude.com/claude-code)
 [![Also runs on: Pi · Antigravity](https://img.shields.io/badge/also%20runs%20on-Pi%20%C2%B7%20Antigravity-3D5A9E?style=flat-square)](docs/harness-bindings/README.md)
@@ -7,7 +7,7 @@
 [![Last commit](https://img.shields.io/github/last-commit/dasirra/devforge?style=flat-square&color=3D5A9E)](https://github.com/dasirra/devforge/commits/main)
 [![Buy Me A Coffee](https://img.shields.io/badge/buy%20me%20a%20coffee-ffdd00?style=flat-square&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/dasirra)
 
-An opinionated idea-to-PR workflow for coding agents, with a human gate at each seam. Three skills, run in order. Reference implementation is [Claude Code](https://claude.com/claude-code); Pi and Google Antigravity run the same skills through per-harness bindings, see [Portability](#portability).
+An opinionated, adversarial idea-to-PR workflow for coding agents, with a human gate at each seam. Three skills, run in order. Reference implementation is [Claude Code](https://claude.com/claude-code); Pi and Google Antigravity run the same skills through per-harness bindings, see [Portability](#portability).
 
 ```
 PM   /devforge:interview   vague idea         ->  docs/specs/YYYY-MM-DD-<slug>.md
