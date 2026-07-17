@@ -255,7 +255,13 @@ is trivially linear.>
 ```
 
 ## Acceptance criteria
-- <observable behavior, human-readable>
+**Given** <precondition>
+**When** <trigger>
+**Then** <outcome>
+
+**Given** <precondition>
+**When** <trigger>
+**Then** <outcome>
 ...
 
 ## Out of scope
