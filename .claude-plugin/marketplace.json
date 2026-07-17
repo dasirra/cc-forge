@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "cc-forge",
-  "description": "An idea-to-PR pipeline for Claude Code, with a human gate at each seam.",
+  "name": "devforge",
+  "description": "An idea-to-PR pipeline for coding agents, with a human gate at each seam.",
   "owner": {
     "name": "Daniel Asirra",
     "url": "https://github.com/dasirra"

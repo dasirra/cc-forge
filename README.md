@@ -2,9 +2,9 @@
 
 [![Reference: Claude Code](https://img.shields.io/badge/reference-Claude%20Code-B0680F?style=flat-square)](https://claude.com/claude-code)
 [![Also runs on: Pi · Antigravity](https://img.shields.io/badge/also%20runs%20on-Pi%20%C2%B7%20Antigravity-3D5A9E?style=flat-square)](docs/harness-bindings/README.md)
-[![License: MIT](https://img.shields.io/github/license/dasirra/cc-forge?style=flat-square&color=0E7C6B)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/dasirra/cc-forge?style=flat-square&color=B0680F)](https://github.com/dasirra/cc-forge/stargazers)
-[![Last commit](https://img.shields.io/github/last-commit/dasirra/cc-forge?style=flat-square&color=3D5A9E)](https://github.com/dasirra/cc-forge/commits/main)
+[![License: MIT](https://img.shields.io/github/license/dasirra/devforge?style=flat-square&color=0E7C6B)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/dasirra/devforge?style=flat-square&color=B0680F)](https://github.com/dasirra/devforge/stargazers)
+[![Last commit](https://img.shields.io/github/last-commit/dasirra/devforge?style=flat-square&color=3D5A9E)](https://github.com/dasirra/devforge/commits/main)
 
 An opinionated idea-to-PR workflow for coding agents, with a human gate at each seam. Three skills, run in order. Reference implementation is [Claude Code](https://claude.com/claude-code); Pi and Google Antigravity run the same skills through per-harness bindings, see [Portability](#portability).
 
@@ -36,8 +36,8 @@ Between the two sits a human gate. The issues land on GitHub and stop there. You
 ## Install
 
 ```
-/plugin marketplace add dasirra/cc-forge
-/plugin install forge@cc-forge
+/plugin marketplace add dasirra/devforge
+/plugin install forge@devforge
 ```
 
 ## Requirements
@@ -113,7 +113,7 @@ Facts are the exception, because a fact is not a decision. Before it writes a si
 
 For the same reason, `/forge:building` pauses on the negotiated contract by default: a fixed template showing the grounding block and the evaluator's residual risks before the criteria, each criterion with its own worked example, ending in a real approve / request-changes / abort prompt so the pause holds on every harness rather than depending on a model choosing to stop. The contract is the last artifact you can correct cheaply: after it, every criterion, every builder and every sibling issue inherits its premises. `--no-gate` runs straight through when you already trust them.
 
-Every phase, agent, artifact, and loop is laid out in the [full pipeline reference](https://htmlpreview.github.io/?https://github.com/dasirra/cc-forge/blob/main/docs/pipeline.html), which also documents the evaluation surfaces. Source: [`docs/pipeline.html`](docs/pipeline.html).
+Every phase, agent, artifact, and loop is laid out in the [full pipeline reference](https://htmlpreview.github.io/?https://github.com/dasirra/devforge/blob/main/docs/pipeline.html), which also documents the evaluation surfaces. Source: [`docs/pipeline.html`](docs/pipeline.html).
 
 ## Design
 
