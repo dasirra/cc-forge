@@ -46,10 +46,12 @@ All shared state lives in `harness/` inside the worktree (gitignored):
   re-derives it. `grounding` is the array of substrate the contract stands on,
   each entry `{name, status: EXISTS|NEW, evidence, human_ack}`; see Phase 2.
   Each criterion is
-  `{id, issue, criterion, verify_how, status: proposed|agreed|pass|fail}`.
-  `issue` is the issue number the criterion belongs to, or `"integration"`
-  for cross-issue behavior. Single-issue and free-form runs use one issue
-  value throughout.
+  `{id, issue, criterion, example, verify_how, status: proposed|agreed|pass|fail}`.
+  `example` is a single worked-example string showing the criterion applied
+  to concrete data, in the same register as the criterion itself (for
+  example, `parse('') -> raises ValueError('empty input')`). `issue` is the
+  issue number the criterion belongs to, or `"integration"` for cross-issue
+  behavior. Single-issue and free-form runs use one issue value throughout.
 - `harness/critique.md`: evaluator findings, rewritten each round
 - `harness/eval/`: the evaluator's throwaway verification scripts. Never
   committed, never merged into the project's test suite.
