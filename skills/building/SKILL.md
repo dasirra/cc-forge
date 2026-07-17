@@ -255,6 +255,13 @@ anyone:
 - Each teammate appends what it did to `harness/progress.json`.
 - Keep changes consistent with surrounding code: naming, structure, comment
   density.
+- **Forbid this run's vocabulary in the artifact, in every teammate prompt.**
+  No issue numbers, no contract clause ids, no `harness/` paths, no role
+  names ("the evaluator", "eval seam", "the contract") in comments,
+  docstrings, test names, section headers, or user-facing strings. You are
+  handing each teammate a brief full of `C13` and `#62`, and a builder that
+  reads `C13` in its brief will write `# C13:` in the code unless told not
+  to. Say it explicitly, every time. See Guardrails.
 
 Cross-workstream integration defects are caught by the behavioral
 evaluation (Phase 6), not here.
@@ -353,6 +360,21 @@ Loop, max `--max-rounds` (default 5) rounds:
   evaluator writes its own scripts, from the contract alone.
 - The evaluator's scripts stay in `harness/eval/`, uncommitted, and are never
   merged into the project's test suite.
+- **This run's nomenclature must not survive this run.** `harness/` is
+  gitignored and thrown away. The contract lives only in an issue comment,
+  which is not in the repository. Bare clause ids collide across contracts:
+  the `C7` of one issue is not the `C7` of the next. So a comment citing
+  `C13`, `#62`, `harness/eval-notes.md`, or `contract §3.3` is unresolvable
+  to a reader holding only a clone. It is a dead end carrying a citation's
+  confidence, and it rots the moment the cited artifact is deleted or the
+  numbering is reused. Role names are worse than useless: they misdescribe
+  the code. A production guard whose docstring calls it an "eval seam" reads
+  as scaffolding, and scaffolding invites deletion. Comments state the
+  substance, in terms a stranger can check against the code in front of them.
+  Git history and the issue thread answer "which change introduced this and
+  why was it argued that way"; the comment answers "what constraint does this
+  code satisfy". This binds you as lead too, when you relay a critique or
+  write a commit body's neighbouring code.
 - Stay within the scope set by the contract. Adjacent work becomes
   a follow-up note, not PR growth.
 - Never commit or push to the base branch directly; everything reaches it
