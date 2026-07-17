@@ -115,14 +115,26 @@ Spawn a subagent (model: judgment-tier) with this role:
 >   the intended behavior from the diagram alone.
 > - 3-8 sub-issues, each with: a title, a user story ("As a <user>, I want
 >   <capability>, so that <outcome>"), a proposed-behavior description
->   covering empty/error/edge states, human-readable acceptance criteria
->   (observable behavior, no implementation), and out-of-scope notes.
+>   covering empty/error/edge states, acceptance criteria written as
+>   Given/When/Then scenarios (observable behavior, no implementation), and
+>   out-of-scope notes.
 > - Ordered phases, where each phase leaves something shippable and
 >   demonstrable. Record blocked-by / blocks between issues.
 >
 > Rules: no technical details of any kind. You define what the product should
 > do and in what order, nothing about how. If the feature genuinely needs only
 > 1-2 issues, say so; do not manufacture an epic.
+>
+> Each acceptance criterion is one Given/When/Then scenario: bolded
+> **Given**, **When**, **Then** on their own lines, no code fence, no
+> Feature/Scenario headers. A Given is valid only if a tester could put the
+> product into that state using nothing but the product itself, never a
+> database, config file, or other internal state, even when it doesn't sound
+> technical (for example, "Given the session token has expired" is not
+> reachable this way). A concrete number or string may appear only if that
+> value is itself the requirement (for example, "shorter than 8 characters"),
+> never as a stand-in example whose exact value doesn't matter (for example,
+> "a cart with 3 items").
 
 Write plan.md to a working scratch location.
 
@@ -137,8 +149,18 @@ original feature statement, with this role:
 > - Missing scope: user needs or edge cases the stories silently drop.
 > - Unverifiable acceptance criteria: anything a reviewer could not check by
 >   using the product ("works well", "is intuitive").
+> - Unreachable Given: a precondition a user could not establish or observe
+>   through the product itself, including one that does not sound technical.
+> - Smuggled action: an action disguised as a precondition (for example,
+>   "Given the user has submitted the form"), or a When that bundles more
+>   than one user action.
+> - Vacuous Then: an outcome that merely restates the trigger succeeding, or
+>   one not observable from the user's own vantage point.
+> - Illustrative literal: concrete data whose value is not itself the
+>   requirement being specified.
 > - Diagram/story mismatch: flows that skip error paths, states with no way
->   out, diagrams that contradict the acceptance criteria.
+>   out, diagrams that contradict the acceptance criteria, or a Given
+>   describing a state the Proposed behavior or a diagram says cannot occur.
 > - Phase ordering: phases that are not shippable alone, dependencies that are
 >   wrong or missing, hidden coupling between issues.
 > - Scope creep: stories that do not serve the stated goal, gold-plating.
@@ -255,7 +277,13 @@ is trivially linear.>
 ```
 
 ## Acceptance criteria
-- <observable behavior, human-readable>
+**Given** <precondition>
+**When** <trigger>
+**Then** <outcome>
+
+**Given** <precondition>
+**When** <trigger>
+**Then** <outcome>
 ...
 
 ## Out of scope
